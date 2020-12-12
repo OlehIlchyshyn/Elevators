@@ -1,2 +1,15 @@
-package com.dreamteam.model;public class ElevatorA {
+package com.dreamteam.model;
+
+import lombok.AllArgsConstructor;
+
+public class ElevatorA extends Elevator{
+
+    public ElevatorA(Floor floor) {
+        super(floor);
+    }
+
+    @Override
+    public void moveToNextFloor() {
+
+    }
 }

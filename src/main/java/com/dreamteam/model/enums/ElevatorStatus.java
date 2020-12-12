@@ -1,4 +1,6 @@
 package com.dreamteam.model.enums;
 
-public enum Status {
+public enum ElevatorStatus {
+    FREE,
+    BUSY
 }
