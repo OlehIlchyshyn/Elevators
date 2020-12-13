@@ -7,27 +7,26 @@ import com.dreamteam.model.User;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class Demo {
     public static void main(String[] args) {
         List<Floor> floorList = new ArrayList<>();
-        for (int i = 1; i <=9; ++i) {
-            floorList.add(new Floor(i, new HashMap<>()));
+        for (int i = 0; i <=9; ++i) {
+            floorList.add(new Floor(i));
         }
 
         Elevator elevator = new ElevatorA(floorList.get(0));
+        floorList.forEach(f -> f.initQueues(List.of(elevator)));
 
-        User user1 = new User(0, "Oleh", 60, floorList.get(4), floorList.get(8), elevator);
-        User user2 = new User(1, "Oleh", 60, floorList.get(4), floorList.get(6), elevator);
-        User user3 = new User(2, "Oleh", 60, floorList.get(6), floorList.get(7), elevator);
-        User user4 = new User(3, "Oleh", 60, floorList.get(6), floorList.get(8), elevator);
-        User user5= new User(4, "Oleh", 60, floorList.get(6), floorList.get(2), elevator);
-        User user6 = new User(5, "Oleh", 60, floorList.get(1), floorList.get(4), elevator);
-        User user7 = new User(6, "Oleh", 60, floorList.get(0), floorList.get(3), elevator);
-        User user8 = new User(7, "Oleh", 60, floorList.get(3), floorList.get(5), elevator);
+        User user1 = new User(0, "Oleh", 60, floorList.get(4), floorList.get(8));
+        User user2 = new User(1, "Oleh", 60, floorList.get(4), floorList.get(6));
+        User user3 = new User(2, "Oleh", 60, floorList.get(6), floorList.get(7));
+        User user4 = new User(3, "Oleh", 60, floorList.get(6), floorList.get(8));
+        User user5= new User(4, "Oleh", 60, floorList.get(6), floorList.get(2));
+        User user6 = new User(5, "Oleh", 60, floorList.get(1), floorList.get(4));
+        User user7 = new User(6, "Oleh", 60, floorList.get(0), floorList.get(3));
+        User user8 = new User(7, "Oleh", 60, floorList.get(3), floorList.get(5));
 
         user1.callElevator();
         //add thread for elevator
@@ -41,7 +40,7 @@ public class Demo {
 
 
 
-        SwingUtilities.invokeLater(Demo::createAndShowGUI);
+//        SwingUtilities.invokeLater(Demo::createAndShowGUI);
     }
 
     private static void createAndShowGUI() {

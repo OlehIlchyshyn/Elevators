@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class User {
     private int id;
     private String name;
@@ -14,6 +13,14 @@ public class User {
     private Floor startFloor;
     private Floor destinationFloor;
     private Elevator chosenElevator;
+
+    public User(int id, String name, int weight, Floor startFloor, Floor destinationFloor) {
+        this.id = id;
+        this.name = name;
+        this.weight = weight;
+        this.startFloor = startFloor;
+        this.destinationFloor = destinationFloor;
+    }
 
     /**
      *
