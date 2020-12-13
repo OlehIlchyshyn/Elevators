@@ -42,6 +42,11 @@ public abstract class Elevator {
     public void allActionsOnCurrentFloor() {
         deleteUserWhoExitOnCurrentFloor();
         pickupUsersOnCurrentFloor();
+        if(destinations.isEmpty()) {
+            status = ElevatorStatus.FREE;
+            return;
+        }
+        moveToFloor(destinations.get(0));
     }
 
     private void deleteUserWhoExitOnCurrentFloor() {
@@ -52,10 +57,10 @@ public abstract class Elevator {
         while (true)
         {
             var currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
+            System.out.println(currentUser.getId());
             if (currentUser.canUserEnter(this)) {
                 waitingUsers.remove(currentUser);
                 currentFloor.getUsersQueueToElevator().get(this).poll();
-                destinations.stream().map(Floor::getNumber).min(Integer::compare);
                 if (destinations.contains(currentUser.getDestinationFloor())) continue;
                 boolean isInserted = false;
                 for (int i = 0; i < destinations.size() - 1; ++i) {
@@ -64,12 +69,12 @@ public abstract class Elevator {
                     if (currentUser.getDestinationFloor().getNumber() < maxFloorNo &&
                             currentUser.getDestinationFloor().getNumber() > minFloorNo)
                     {
-
                         destinations.add(i+1, currentUser.getDestinationFloor());
                         isInserted = true;
                         break;
                     }
                 }
+                //????????
                 if (!isInserted) {
                     destinations.add(currentUser.getDestinationFloor());
                 }
@@ -94,17 +99,18 @@ public abstract class Elevator {
     }
 
     public void invoke(User user) {
-        if (status == ElevatorStatus.FREE) {
-            status = ElevatorStatus.BUSY;
+        if (status == ElevatorStatus.BUSY) {
+            waitingUsers.add(user);
+            return;
+        }
+        status = ElevatorStatus.BUSY;
+        if (user.getStartFloor() != currentFloor) {
             currentDestination = user.getStartFloor();
             destinations.add(currentDestination);
-            if (user.getStartFloor() == currentFloor) {
-                allActionsOnCurrentFloor();
-            } else {
-                moveToFloor(user.getStartFloor());
-            }
-        } else {
-            waitingUsers.add(user);
+            moveToFloor(destinations.get(0));
         }
+        allActionsOnCurrentFloor();
+        moveToFloor(destinations.get(0));
     }
 }
+
