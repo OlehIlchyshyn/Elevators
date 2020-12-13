@@ -2,13 +2,17 @@ package com.dreamteam.model;
 
 import com.dreamteam.model.enums.ElevatorStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-@Data
+@Getter
+@Setter
 public abstract class Elevator {
     public static int maxUserCount = 10;
     public static int capacity = 1000;
@@ -48,14 +52,14 @@ public abstract class Elevator {
 //        activeUsers.stream().filter(u -> u.getDestinationFloor()==currentDestination);
         moveToTheNextFloor();
     }
+
     public void takeWaitingUsers() {
         invoke(waitingUsers.poll());
     }
 
     public void moveToTheNextFloor() {
-            currentDestination = destinations.get(0);
-            moveToFloor(destinations.get(0));
-            allActionsOnCurrentFloor();
+        moveToFloor(currentDestination);
+        allActionsOnCurrentFloor();
     }
 
 
@@ -67,8 +71,10 @@ public abstract class Elevator {
     private void pickupUsersOnCurrentFloor() {
         while (true)
         {
-            var currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
-            System.out.println(currentUser.getId());
+            User currentUser;
+            if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
+                currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
+            } else break;
             if (currentUser.canUserEnter(this)) {
                 waitingUsers.remove(currentUser);
                 currentFloor.getUsersQueueToElevator().get(this).poll();

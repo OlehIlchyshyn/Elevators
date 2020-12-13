@@ -1,11 +1,11 @@
 package com.dreamteam.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 public class User {
     private int id;
     private String name;

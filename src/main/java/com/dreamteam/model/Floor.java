@@ -1,11 +1,11 @@
 package com.dreamteam.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 import java.util.*;
 
-@Data
+@Getter
+@Setter
 public class Floor {
     private int number;
     private Map<Elevator, Queue<User>> usersQueueToElevator;
@@ -18,7 +18,7 @@ public class Floor {
         usersQueueToElevator = new HashMap<>();
         for (var elevator: elevators) {
             if (!usersQueueToElevator.containsKey(elevator)) {
-                usersQueueToElevator.put(elevator, new LinkedList<>());
+                usersQueueToElevator.put(elevator, new ArrayDeque<>());
             }
         }
     }
