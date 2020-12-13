@@ -5,8 +5,5 @@ public class ElevatorB extends Elevator {
         super(floor);
     }
 
-    @Override
-    public void moveToNextFloor() {
 
-    }
 }

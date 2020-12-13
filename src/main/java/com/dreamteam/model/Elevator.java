@@ -21,7 +21,6 @@ public abstract class Elevator {
     private Floor currentFloor;
     private Floor currentDestination;
 
-    public abstract void moveToNextFloor();
 
     public Elevator(Floor floor) {
         currentFloor = floor;
@@ -44,10 +43,22 @@ public abstract class Elevator {
         pickupUsersOnCurrentFloor();
         if(destinations.isEmpty()) {
             status = ElevatorStatus.FREE;
-            return;
+            takeWaitingUsers();
         }
-        moveToFloor(destinations.get(0));
+//        activeUsers.stream().filter(u -> u.getDestinationFloor()==currentDestination);
+        moveToTheNextFloor();
     }
+    public void takeWaitingUsers() {
+        invoke(waitingUsers.poll());
+    }
+
+    public void moveToTheNextFloor() {
+            currentDestination = destinations.get(0);
+            moveToFloor(destinations.get(0));
+            allActionsOnCurrentFloor();
+    }
+
+
 
     private void deleteUserWhoExitOnCurrentFloor() {
         activeUsers.removeIf(x -> x.getDestinationFloor() == currentFloor);
