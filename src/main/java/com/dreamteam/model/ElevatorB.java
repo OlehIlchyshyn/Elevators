@@ -1,7 +1,5 @@
 package com.dreamteam.model;
 
-import com.dreamteam.model.enums.ElevatorStatus;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.stream.Collectors;
@@ -20,11 +18,21 @@ public class ElevatorB extends Elevator {
             return;
         }
         waitingUsers.add(user);
-        if(isIntermediateFloors(user.getStartFloor())) {
-            currentDestination = user.getStartFloor();
-            destinations.add(0, currentDestination);
-            moveToTheNextFloor();
-            return;
+        if(currentFloor.getNumber()<user.getStartFloor().getNumber()) {
+            if (isIntermediateFloorsUp(user.getStartFloor())) {
+                currentDestination = user.getStartFloor();
+                destinations.add(1, currentDestination);
+                moveToTheNextFloor();
+                return;
+            }
+        }
+        if(currentFloor.getNumber()<user.getStartFloor().getNumber()) {
+            if (isIntermediateFloorsDown(user.getStartFloor())) {
+                currentDestination = user.getStartFloor();
+                destinations.add(1, currentDestination);
+                moveToTheNextFloor();
+                return;
+            }
         }
         destinations.add(user.getStartFloor());
     }
@@ -33,19 +41,35 @@ public class ElevatorB extends Elevator {
 //    private void sortDestinations() {
 //        Collections.sort(destinations, Comparator.comparingInt(Floor::getNumber));
 //    }
-    private boolean isIntermediateFloors (Floor userDestination) {
+    private boolean isIntermediateFloorsUp(Floor userDestination) {
 
          if(currentFloor.getNumber()<userDestination.getNumber()&&
-          currentDestination.getNumber()>userDestination.getNumber()) return true;
+                 currentDestination.getNumber()>userDestination.getNumber()) return true;
+
          return false;
     }
+    private boolean isIntermediateFloorsDown(Floor userDestination) {
 
-    private void addIntermediateFloors() {
+        if(currentFloor.getNumber()<userDestination.getNumber()&&
+                currentDestination.getNumber()>userDestination.getNumber()) return true;
+
+        return false;
+    }
+
+    private void addIntermediateFloorsUp() {
         var sortedUserList = waitingUsers.stream().sorted(Comparator.comparingInt(x -> x.getStartFloor().getNumber())).collect(Collectors.toList());
         Collections.reverse(sortedUserList);
         for (var user : sortedUserList) {
-            if (isIntermediateFloors(user.getStartFloor())) {
-                destinations.add(0,user.getStartFloor());
+            if (isIntermediateFloorsUp(user.getStartFloor())) {
+                destinations.add(1,user.getStartFloor());
+            }
+        }
+    }
+    private void addIntermediateFloorsDown() {
+        var sortedUserList = waitingUsers.stream().sorted(Comparator.comparingInt(x -> x.getStartFloor().getNumber())).collect(Collectors.toList());
+        for (var user : sortedUserList) {
+            if (isIntermediateFloorsUp(user.getStartFloor())) {
+                destinations.add(1,user.getStartFloor());
             }
         }
     }
@@ -86,6 +110,12 @@ public class ElevatorB extends Elevator {
             } else {
                 break;
             }
+        }
+        if(currentFloor.getNumber()>destinations.get(1).getNumber()) {
+            addIntermediateFloorsDown();
+        }
+        if(currentFloor.getNumber()<destinations.get(1).getNumber()) {
+            addIntermediateFloorsUp();
         }
 
 

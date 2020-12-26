@@ -23,7 +23,14 @@ public class Demo {
 
 
         User user1 = newUser(floorList);
-        floorList.get(2).add(user1);
+        User user2 = newUser(floorList);
+        User user3 = newUser(floorList);
+        User user4 = newUser(floorList);
+        User user5 = newUser(floorList);
+        User user6 = newUser(floorList);
+        User user7 = newUser(floorList);
+        User user8 = newUser(floorList);
+        User user9 = newUser(floorList);
 //        User user2 = new User(1, "Oleh", 60, floorList.get(4), floorList.get(6));
 //        User user3 = new User(2, "Oleh", 60, floorList.get(6), floorList.get(7));
 //        User user4 = new User(3, "Oleh", 60, floorList.get(6), floorList.get(8));
@@ -32,8 +39,6 @@ public class Demo {
 //        User user7 = new User(6, "Oleh", 60, floorList.get(0), floorList.get(3));
 //        User user8 = new User(7, "Oleh", 60, floorList.get(3), floorList.get(5));
 //        ;
-        user1.chooseElevator();
-        user1.callElevator();
         //add thread for elevator
 //        user2.callElevator();
 //        user3.callElevator();
@@ -48,8 +53,12 @@ public class Demo {
 //        SwingUtilities.invokeLater(Demo::createAndShowGUI);
     }
     private static User newUser (List<Floor> floorList) {
+        int randomStartFloor=1+(int) (Math.random()*floorList.size()-1);
+        int randomDestinationFloor=1+(int) (Math.random()*floorList.size()-1);
+        var user = new User("Oleh", 60, floorList.get(randomStartFloor), floorList.get(randomDestinationFloor));
+        floorList.get(randomStartFloor).add(user);
+        user.callElevator();
 
-        var user = new User(0, "Oleh", 60, floorList.get(2), floorList.get(3));
         return user;
     }
     private static void createAndShowGUI() {
