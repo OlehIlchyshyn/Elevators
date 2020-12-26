@@ -4,6 +4,7 @@ import com.dreamteam.model.enums.ElevatorStatus;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class ElevatorB extends Elevator {
     public ElevatorB(Floor floor) {
@@ -38,9 +39,12 @@ public class ElevatorB extends Elevator {
           currentDestination.getNumber()>userDestination.getNumber()) return true;
          return false;
     }
+
     private void addIntermediateFloors() {
-        for(var user:waitingUsers) {
-            if(isIntermediateFloors(user.getStartFloor())) {
+        var sortedUserList = waitingUsers.stream().sorted(Comparator.comparingInt(x -> x.getStartFloor().getNumber())).collect(Collectors.toList());
+        Collections.reverse(sortedUserList);
+        for (var user : sortedUserList) {
+            if (isIntermediateFloors(user.getStartFloor())) {
                 destinations.add(0,user.getStartFloor());
             }
         }
