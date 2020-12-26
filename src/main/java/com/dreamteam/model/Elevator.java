@@ -45,7 +45,7 @@ public abstract class Elevator {
     public void allActionsOnCurrentFloor() {
         deleteUserWhoExitOnCurrentFloor();
         pickupUsersOnCurrentFloor();
-        if(destinations.size()>1) {
+        if(destinations.size()==1) {
             status = ElevatorStatus.FREE;
             if(waitingUsers.size()!=0) {
                 takeWaitingUsers();

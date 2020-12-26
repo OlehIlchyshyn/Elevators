@@ -38,7 +38,55 @@ public class ElevatorB extends Elevator {
           currentDestination.getNumber()>userDestination.getNumber()) return true;
          return false;
     }
+    private void addIntermediateFloors() {
+        for(var user:waitingUsers) {
+            if(isIntermediateFloors(user.getStartFloor())) {
+                destinations.add(0,user.getStartFloor());
+            }
+        }
+    }
+
+    @Override
+    protected void pickupUsersOnCurrentFloor() {
+        super.pickupUsersOnCurrentFloor();
+        while (true)
+        {
+            User currentUser;
+            if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
+                currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
+            } else break;
+
+            if (currentUser.canUserEnter(this)) {
+                //hm
+                if(waitingUsers.contains(currentUser))
+                    waitingUsers.remove(currentUser);
+                currentFloor.getUsersQueueToElevator().get(this).poll();
+                if (destinations.contains(currentUser.getDestinationFloor())) continue;
+                boolean isInserted = false;
+                for (int i = 0; i < destinations.size() - 1; ++i) {
+                    int minFloorNo = Math.min(destinations.get(i).getNumber(), destinations.get(i+1).getNumber());
+                    int maxFloorNo = Math.max(destinations.get(i).getNumber(), destinations.get(i+1).getNumber());
+                    if (currentUser.getDestinationFloor().getNumber() < maxFloorNo &&
+                            currentUser.getDestinationFloor().getNumber() > minFloorNo)
+                    {
+                        destinations.add(i+1, currentUser.getDestinationFloor());
+                        isInserted = true;
+                        break;
+                    }
+                }
+                //????????
+                if (!isInserted) {
+                    destinations.add(currentUser.getDestinationFloor());
+                }
+                activeUsers.add(currentUser);
+            } else {
+                break;
+            }
+        }
 
 
+        if(destinations.size()>1)
+            currentDestination = destinations.get(1);
+    }
 }
 
