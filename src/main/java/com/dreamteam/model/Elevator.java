@@ -17,13 +17,13 @@ public abstract class Elevator {
     public static int maxUserCount = 10;
     public static int capacity = 1000;
 
-    private int id;
-    private ElevatorStatus status;
-    private List<User> activeUsers;
-    private Queue<User> waitingUsers;
-    private List<Floor> destinations;
-    private Floor currentFloor;
-    private Floor currentDestination;
+    protected int id;
+    protected ElevatorStatus status;
+    protected List<User> activeUsers;
+    protected Queue<User> waitingUsers;
+    protected List<Floor> destinations;
+    protected Floor currentFloor;
+    protected Floor currentDestination;
 
 
     public Elevator(Floor floor) {
@@ -45,38 +45,41 @@ public abstract class Elevator {
     public void allActionsOnCurrentFloor() {
         deleteUserWhoExitOnCurrentFloor();
         pickupUsersOnCurrentFloor();
-        if(destinations.isEmpty()) {
+        if(destinations.size()>1) {
             status = ElevatorStatus.FREE;
-            takeWaitingUsers();
+            if(waitingUsers.size()!=0) {
+                takeWaitingUsers();
+            }
+            return;
         }
-//        activeUsers.stream().filter(u -> u.getDestinationFloor()==currentDestination);
         moveToTheNextFloor();
     }
 
-    public void takeWaitingUsers() {
+    protected void takeWaitingUsers() {
         invoke(waitingUsers.poll());
     }
 
     public void moveToTheNextFloor() {
-        moveToFloor(currentDestination);
-        allActionsOnCurrentFloor();
+      moveToFloor();
+      allActionsOnCurrentFloor();
     }
 
-
-
-    private void deleteUserWhoExitOnCurrentFloor() {
+    protected void deleteUserWhoExitOnCurrentFloor() {
         activeUsers.removeIf(x -> x.getDestinationFloor() == currentFloor);
     }
 
-    private void pickupUsersOnCurrentFloor() {
+    protected void pickupUsersOnCurrentFloor() {
         while (true)
         {
             User currentUser;
             if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
                 currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
             } else break;
+
             if (currentUser.canUserEnter(this)) {
-                waitingUsers.remove(currentUser);
+                //hm
+                if(waitingUsers.contains(currentUser))
+                    waitingUsers.remove(currentUser);
                 currentFloor.getUsersQueueToElevator().get(this).poll();
                 if (destinations.contains(currentUser.getDestinationFloor())) continue;
                 boolean isInserted = false;
@@ -100,10 +103,11 @@ public abstract class Elevator {
                 break;
             }
         }
-        currentDestination = destinations.get(1);
+        if(destinations.size()>1)
+            currentDestination = destinations.get(1);
     }
 
-    protected void moveToFloor(Floor floor) {
+    protected void moveToFloor() {
         if (currentDestination == null) {
             this.status = ElevatorStatus.FREE;
             return;
@@ -115,19 +119,7 @@ public abstract class Elevator {
         }
     }
 
-    public void invoke(User user) {
-        if (status == ElevatorStatus.BUSY) {
-            waitingUsers.add(user);
-            return;
-        }
-        status = ElevatorStatus.BUSY;
-        if (user.getStartFloor() != currentFloor) {
-            currentDestination = user.getStartFloor();
-            destinations.add(currentDestination);
-            moveToFloor(destinations.get(0));
-        }
-        allActionsOnCurrentFloor();
-        moveToFloor(destinations.get(0));
+    public  void  invoke(User user) {
     }
 }
 
