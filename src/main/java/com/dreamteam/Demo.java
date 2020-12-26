@@ -33,7 +33,7 @@ public class Demo {
 //        User user8 = new User(7, "Oleh", 60, floorList.get(3), floorList.get(5));
 //        ;
         user1.chooseElevator();
-        user1.callElevator();
+        user1.callElevator() ;
         //add thread for elevator
 //        user2.callElevator();
 //        user3.callElevator();
