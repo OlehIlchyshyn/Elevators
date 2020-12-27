@@ -1,9 +1,12 @@
 package com.dreamteam.model;
 
+import com.dreamteam.model.enums.ElevatorStatus;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.stream.Collectors;
-
+@Slf4j
 public class ElevatorB extends Elevator {
     public ElevatorB(Floor floor) {
         super(floor);
@@ -11,10 +14,16 @@ public class ElevatorB extends Elevator {
 
 
     @Override
-    public void invoke(User user) {
+    public void invoke(User user) throws InterruptedException {
         super.invoke(user);
         if (user.getStartFloor() == currentFloor) {
             allActionsOnCurrentFloor();
+            return;
+        }
+        if(status== ElevatorStatus.FREE) {
+            currentDestination = user.getStartFloor();
+            destinations.add(1, currentDestination);
+            moveToTheNextFloor();
             return;
         }
         waitingUsers.add(user);
@@ -77,12 +86,17 @@ public class ElevatorB extends Elevator {
     @Override
     protected void pickupUsersOnCurrentFloor() {
         super.pickupUsersOnCurrentFloor();
+        log.warn("Current floor of elevatorB " + currentFloor.getNumber());
+        log.warn("Current waiting users size elevatorB is:"+waitingUsers.size());
+
+
         while (true)
         {
             User currentUser;
             if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
                 currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
             } else break;
+            log.warn("Current user of elevatorB " + currentUser.getId()+" Start floor:"+currentUser.getStartFloor().getNumber()+" Destination floor"+currentUser.getDestinationFloor().getNumber());
 
             if (currentUser.canUserEnter(this)) {
                 //hm
@@ -111,10 +125,10 @@ public class ElevatorB extends Elevator {
                 break;
             }
         }
-        if(currentFloor.getNumber()>destinations.get(1).getNumber()) {
+        if(destinations.size()>1 && currentFloor.getNumber()>destinations.get(1).getNumber()) {
             addIntermediateFloorsDown();
         }
-        if(currentFloor.getNumber()<destinations.get(1).getNumber()) {
+        if(destinations.size()>1 && currentFloor.getNumber()<destinations.get(1).getNumber()) {
             addIntermediateFloorsUp();
         }
 

@@ -9,7 +9,8 @@ import java.util.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class User {
-    private static int id;
+    private static int userCount;
+    private int id;
     private String name;
     private int weight;
     private Floor startFloor;
@@ -17,7 +18,7 @@ public class User {
     private Elevator chosenElevator;
 
     public User(String name, int weight, Floor startFloor, Floor destinationFloor) {
-        this.id = User.id++;
+        this.id = User.userCount++;
         this.name = name;
         this.weight = weight;
         this.startFloor = startFloor;
@@ -28,7 +29,7 @@ public class User {
      *
      * @return whether lift is coming or not(user will be waiting until elevator will be free)
      */
-    public void callElevator() {
+    public void callElevator() throws InterruptedException {
         chosenElevator.invoke(this);
     }
 

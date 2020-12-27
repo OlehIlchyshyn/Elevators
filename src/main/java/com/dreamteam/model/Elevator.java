@@ -5,14 +5,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import static java.lang.Thread.sleep;
+
 @Getter
 @Setter
+@Slf4j
+
 public abstract class Elevator {
     public static int maxUserCount = 10;
     public static int capacity = 1000;
@@ -42,7 +47,7 @@ public abstract class Elevator {
         return activeUsers.stream().map(User::getWeight).reduce(0, Integer::sum);
     }
 
-    public void allActionsOnCurrentFloor() {
+    public void allActionsOnCurrentFloor() throws InterruptedException {
         deleteUserWhoExitOnCurrentFloor();
         pickupUsersOnCurrentFloor();
         if(destinations.size()==1) {
@@ -55,11 +60,11 @@ public abstract class Elevator {
         moveToTheNextFloor();
     }
 
-    protected void takeWaitingUsers() {
+    protected void takeWaitingUsers() throws InterruptedException {
         invoke(waitingUsers.poll());
     }
 
-    public void moveToTheNextFloor() {
+    public void moveToTheNextFloor() throws InterruptedException {
       moveToFloor();
       allActionsOnCurrentFloor();
     }
@@ -69,45 +74,12 @@ public abstract class Elevator {
     }
 
     protected void pickupUsersOnCurrentFloor() {
-        while (true)
-        {
-            User currentUser;
-            if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
-                currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
-            } else break;
 
-            if (currentUser.canUserEnter(this)) {
-                //hm
-                if(waitingUsers.contains(currentUser))
-                    waitingUsers.remove(currentUser);
-                currentFloor.getUsersQueueToElevator().get(this).poll();
-                if (destinations.contains(currentUser.getDestinationFloor())) continue;
-                boolean isInserted = false;
-                for (int i = 0; i < destinations.size() - 1; ++i) {
-                    int minFloorNo = Math.min(destinations.get(i).getNumber(), destinations.get(i+1).getNumber());
-                    int maxFloorNo = Math.max(destinations.get(i).getNumber(), destinations.get(i+1).getNumber());
-                    if (currentUser.getDestinationFloor().getNumber() < maxFloorNo &&
-                            currentUser.getDestinationFloor().getNumber() > minFloorNo)
-                    {
-                        destinations.add(i+1, currentUser.getDestinationFloor());
-                        isInserted = true;
-                        break;
-                    }
-                }
-                //????????
-                if (!isInserted) {
-                    destinations.add(currentUser.getDestinationFloor());
-                }
-                activeUsers.add(currentUser);
-            } else {
-                break;
-            }
-        }
-        if(destinations.size()>1)
-            currentDestination = destinations.get(1);
+
     }
 
-    protected void moveToFloor() {
+    protected void moveToFloor() throws InterruptedException {
+        sleep(100);
         if (currentDestination == null) {
             this.status = ElevatorStatus.FREE;
             return;
@@ -119,7 +91,7 @@ public abstract class Elevator {
         }
     }
 
-    public  void  invoke(User user) {
+    public  void  invoke(User user) throws InterruptedException {
     }
 }
 
