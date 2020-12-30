@@ -10,8 +10,15 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.Timer;
 
-
 @Slf4j
+
+//З новим роком!!!!
+//┈┈┈┈┈┈┈┈☆┈┈┈┈┈┈┈┈
+//┈┈┈┈┈┈┈╱┊╲┈┈┈┈┈┈┈
+//┈┈┈┈┈┈╱┊┊┊╲┈┈┈┈┈┈
+//┈┈┈┈┈╱┊┊┊┊┊╲┈┈┈┈┈
+//┈┈┈┈┈▔▔▔▉▔▔▔┈┈┈┈┈
+
 
 public class Demo {
     public static void main(String[] args) {
@@ -29,7 +36,7 @@ public class Demo {
 
         timerToCreateNewUser(floorList);
 
-
+//
 //
 //        User user1 = newUser(floorList);
 //        User user2 = newUser(floorList);
@@ -48,7 +55,7 @@ public class Demo {
 //        User user7 = new User(6, "Oleh", 60, floorList.get(0), floorList.get(3));
 //        User user8 = new User(7, "Oleh", 60, floorList.get(3), floorList.get(5));
 //        ;
-        //add thread for elevator
+//        add thread for elevator
 //        user2.callElevator();
 //        user3.callElevator();
 //        user4.callElevator();
@@ -56,20 +63,34 @@ public class Demo {
 //        user6.callElevator();
 //        user7.callElevator();
 //        user8.callElevator();
-
-
-
+//
+//
+//
 //        SwingUtilities.invokeLater(Demo::createAndShowGUI);
     }
+
+
     private static User newUser (List<Floor> floorList) throws InterruptedException {
         int randomStartFloor=1+(int) (Math.random()*floorList.size()-1);
+        int randomName=1+(int) (Math.random()*10);
+        int randomWeight=40+(int) (Math.random()*100);
         int randomDestinationFloor=1+(int) (Math.random()*floorList.size()-1);
-        var user = new User("Oleh", 60, floorList.get(randomStartFloor), floorList.get(randomDestinationFloor));
+        List<String> names = List.of("Oleh", "Maksym", "Vladyslav", "Valeriia", "Liliia", "Viktoriia", "Anastasiia", "Nazar", "Yaryna", "Illia", "Tetiana");
+        String name = names.get(randomName);
+        var user = new User(name,  randomWeight, floorList.get(randomStartFloor), floorList.get(randomDestinationFloor));
         floorList.get(randomStartFloor).add(user);
-        log.warn("Create new user"+user.getId()+" User start floor is:"+user.getStartFloor().getNumber()+" User destination floor is:"+user.getDestinationFloor().getNumber());
+        log.warn("Created new user "+name+" User ID: "+user.getId()+" User start floor is: "+user.getStartFloor().getNumber()+" User destination floor is: "+user.getDestinationFloor().getNumber());
 
+        threadCreator(user);
         user.callElevator();
         return user;
+    }
+
+    public static void threadCreator(User user)
+    {
+        userThread thread = new userThread();
+        log.warn("New thread created for user with ID "+user.getId()+". Thread ID :" + thread.getId());
+        thread.run();
     }
 
     public static void timerToCreateNewUser(List<Floor> floors) {
@@ -97,6 +118,11 @@ public class Demo {
         //Display the window.
         frame.pack();
         frame.setVisible(true);
+    }
+}
+class userThread extends Thread {
+    public void run(){
+        System.out.println("Thread is working...");
     }
 }
 
