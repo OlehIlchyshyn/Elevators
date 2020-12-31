@@ -21,23 +21,20 @@ import java.util.Timer;
 
 
 public class Demo {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         List<Floor> floorList = new ArrayList<>();
         for (int i = 0; i <=10; ++i) {
             floorList.add(new Floor(i));
         }
 
         Elevator elevator = new ElevatorA(floorList.get(0));
-        Elevator elevator2 = new ElevatorB(floorList.get(0));
+//        Elevator elevator2 = new ElevatorB(floorList.get(0));
         List<Elevator> elevatorList = new ArrayList<>();
         elevatorList.add(elevator);
-        elevatorList.add(elevator2);
+//        elevatorList.add(elevator2);
         floorList.forEach(f -> f.initQueues(elevatorList));
 
         timerToCreateNewUser(floorList);
-
-//
-//
 //        User user1 = newUser(floorList);
 //        User user2 = newUser(floorList);
 //        User user3 = newUser(floorList);
@@ -69,7 +66,6 @@ public class Demo {
 //        SwingUtilities.invokeLater(Demo::createAndShowGUI);
     }
 
-
     private static User newUser (List<Floor> floorList) throws InterruptedException {
         int randomStartFloor=1+(int) (Math.random()*floorList.size()-1);
         int randomName=1+(int) (Math.random()*10);
@@ -80,8 +76,6 @@ public class Demo {
         var user = new User(name,  randomWeight, floorList.get(randomStartFloor), floorList.get(randomDestinationFloor));
         floorList.get(randomStartFloor).add(user);
         log.warn("Created new user "+name+" User ID: "+user.getId()+" User start floor is: "+user.getStartFloor().getNumber()+" User destination floor is: "+user.getDestinationFloor().getNumber());
-
-        threadCreator(user);
         user.callElevator();
         return user;
     }
@@ -97,13 +91,19 @@ public class Demo {
         TimerTask task = new TimerTask() {
             @SneakyThrows
             public void run() {
-                newUser(floors);
+                new Thread(() -> {
+                    try {
+                        newUser(floors);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
             }
         };
         Timer timer = new Timer();
 
         long delay = 2L;
-        long period = 10L;
+        long period = 100L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
     private static void createAndShowGUI() {
