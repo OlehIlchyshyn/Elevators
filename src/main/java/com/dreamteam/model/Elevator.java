@@ -88,6 +88,7 @@ public abstract class Elevator {
         currentFloor = destinations.get(0);
         if (destinations.size() < 2) {
             currentDestination = null;
+            this.status = ElevatorStatus.FREE;
         }
     }
 

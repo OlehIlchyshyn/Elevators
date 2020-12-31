@@ -16,11 +16,16 @@ public class ElevatorB extends Elevator {
     @Override
     public void invoke(User user) throws InterruptedException {
         super.invoke(user);
+//        System.out.println(user.getName());
+//        for (var d:destinations) {
+//            System.out.println("dest "+d.getNumber());
+//        }
         if (user.getStartFloor() == currentFloor) {
             allActionsOnCurrentFloor();
             return;
         }
         if(status== ElevatorStatus.FREE) {
+            status=ElevatorStatus.BUSY;
             currentDestination = user.getStartFloor();
             destinations.add(1, currentDestination);
             moveToTheNextFloor();
@@ -84,7 +89,7 @@ public class ElevatorB extends Elevator {
     }
 
     @Override
-    protected void pickupUsersOnCurrentFloor() {
+    protected  void  pickupUsersOnCurrentFloor() {
         super.pickupUsersOnCurrentFloor();
         log.warn("Current floor of elevatorB " + currentFloor.getNumber());
         log.warn("Current waiting users size elevatorB is:"+waitingUsers.size());
@@ -96,7 +101,7 @@ public class ElevatorB extends Elevator {
             if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
                 currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
             } else break;
-            log.warn("Current user of elevatorB " + currentUser.getId()+" Start floor:"+currentUser.getStartFloor().getNumber()+" Destination floor"+currentUser.getDestinationFloor().getNumber());
+            log.warn("Current user of elevatorB "+currentUser.getName()+" Current user id:" + currentUser.getId()+" Start floor:"+currentUser.getStartFloor().getNumber()+" Destination floor"+currentUser.getDestinationFloor().getNumber());
 
             if (currentUser.canUserEnter(this)) {
                 //hm
@@ -116,11 +121,11 @@ public class ElevatorB extends Elevator {
                         break;
                     }
                 }
-                //????????
                 if (!isInserted) {
                     destinations.add(currentUser.getDestinationFloor());
                 }
                 activeUsers.add(currentUser);
+
             } else {
                 break;
             }
