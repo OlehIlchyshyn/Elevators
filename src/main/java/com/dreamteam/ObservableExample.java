@@ -1,14 +1,10 @@
 package com.dreamteam;
 
 import com.dreamteam.view.MainForm;
-import com.dreamteam.view.StatusColumnCellRenderer;
+import com.dreamteam.view.ElevatorRenderer;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.text.TableView;
-import java.awt.*;
 
 public class ObservableExample {
     public static void main(String[] args) {
@@ -44,19 +40,8 @@ public class ObservableExample {
         model.addRow(new Object[]{"Column 1", "Column 2", "Column 3"});
         model.addRow(new Object[]{"Column 1", "Column 2", "Column 3"});
 
-        TableColumn column = form.getTable1().getColumnModel().getColumn(0);
 
-        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-        renderer.setBackground(Color.blue);
-        renderer.setForeground(Color.yellow);
-        column.setCellRenderer(renderer);
-
-        //var cell = form.getTable1();
-       // DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-      //  renderer.setBackground(Color.blue);
-      //  renderer.setForeground(Color.yellow);
-       // form.getTable1().getModel();
-        form.getTable1().getColumnModel().getColumn(1).setCellRenderer(new StatusColumnCellRenderer(2,2));
-
+        form.getTable1().getColumnModel().getColumn(1).setCellRenderer(new ElevatorRenderer(6));
+        form.getTable1().getColumnModel().getColumn(0).setCellRenderer(new ElevatorRenderer(3));
     }
 }
