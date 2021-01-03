@@ -9,6 +9,7 @@ import java.util.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class User {
+    private static int userCount;
     private int id;
     private String name;
     private int weight;
@@ -16,8 +17,8 @@ public class User {
     private Floor destinationFloor;
     private Elevator chosenElevator;
 
-    public User(int id, String name, int weight, Floor startFloor, Floor destinationFloor) {
-        this.id = id;
+    public User(String name, int weight, Floor startFloor, Floor destinationFloor) {
+        this.id = User.userCount++;
         this.name = name;
         this.weight = weight;
         this.startFloor = startFloor;
@@ -28,31 +29,31 @@ public class User {
      *
      * @return whether lift is coming or not(user will be waiting until elevator will be free)
      */
-    public void callElevator() {
+    public void callElevator() throws InterruptedException {
         chosenElevator.invoke(this);
     }
 
     protected boolean canUserEnter(Elevator elevator) {
         return elevator.getCurrentUserCount() + 1 <= Elevator.maxUserCount && elevator.getCurrentCapacity() + getWeight() <= Elevator.capacity;
     }
-
-    public void chooseElevator() {
-        var elevators=startFloor.getUsersQueueToElevator().values();
-        var minUsersToElevator=1000; //шось мудре тут написати
-        for(var elevator:elevators) {
-            if(elevator.size()<minUsersToElevator) {
-                minUsersToElevator=elevator.size();
-                chosenElevator=startFloor.getUsersQueueToElevator()
-                        .entrySet()
-                        .stream()
-                        .filter(entry -> elevator.equals(entry.getValue()))
-                        .map(Map.Entry::getKey)
-                        .findFirst()
-                        .get();
-            }
-        }
-        System.out.println(elevators);
-    }
+//
+//    public void chooseElevator() {
+//        var elevators=startFloor.getUsersQueueToElevator().values();
+//        var minUsersToElevator=1000; //шось мудре тут написати
+//        for(var elevator:elevators) {
+//            if(elevator.size()<minUsersToElevator) {
+//                minUsersToElevator=elevator.size();
+//                chosenElevator=startFloor.getUsersQueueToElevator()
+//                        .entrySet()
+//                        .stream()
+//                        .filter(entry -> elevator.equals(entry.getValue()))
+//                        .map(Map.Entry::getKey)
+//                        .findFirst()
+//                        .get();
+//            }
+//        }
+//        System.out.println(elevators);
+//    }
 
 
 }

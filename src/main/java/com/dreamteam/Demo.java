@@ -1,29 +1,49 @@
 package com.dreamteam;
 
-import com.dreamteam.model.Elevator;
-import com.dreamteam.model.ElevatorA;
-import com.dreamteam.model.Floor;
-import com.dreamteam.model.User;
+import com.dreamteam.model.*;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.Timer;
+
+@Slf4j
+
+//З новим роком!!!!
+//┈┈┈┈┈┈┈┈☆┈┈┈┈┈┈┈┈
+//┈┈┈┈┈┈┈╱┊╲┈┈┈┈┈┈┈
+//┈┈┈┈┈┈╱┊┊┊╲┈┈┈┈┈┈
+//┈┈┈┈┈╱┊┊┊┊┊╲┈┈┈┈┈
+//┈┈┈┈┈▔▔▔▉▔▔▔┈┈┈┈┈
+
 
 public class Demo {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         List<Floor> floorList = new ArrayList<>();
-        for (int i = 0; i <=3; ++i) {
+        for (int i = 0; i <=10; ++i) {
             floorList.add(new Floor(i));
         }
 
         Elevator elevator = new ElevatorA(floorList.get(0));
+//        Elevator elevator2 = new ElevatorB(floorList.get(0));
         List<Elevator> elevatorList = new ArrayList<>();
         elevatorList.add(elevator);
+//        elevatorList.add(elevator2);
         floorList.forEach(f -> f.initQueues(elevatorList));
 
-
-        User user1 = newUser(floorList);
-        floorList.get(2).add(user1);
+        timerToCreateNewUser(floorList);
+//        User user1 = newUser(floorList);
+//        User user2 = newUser(floorList);
+//        User user3 = newUser(floorList);
+//        User user4 = newUser(floorList);
+//        User user5 = newUser(floorList);
+//        User user6 = newUser(floorList);
+//        User user7 = newUser(floorList);
+//        User user8 = newUser(floorList);
+//        User user9 = newUser(floorList);
 //        User user2 = new User(1, "Oleh", 60, floorList.get(4), floorList.get(6));
 //        User user3 = new User(2, "Oleh", 60, floorList.get(6), floorList.get(7));
 //        User user4 = new User(3, "Oleh", 60, floorList.get(6), floorList.get(8));
@@ -32,9 +52,7 @@ public class Demo {
 //        User user7 = new User(6, "Oleh", 60, floorList.get(0), floorList.get(3));
 //        User user8 = new User(7, "Oleh", 60, floorList.get(3), floorList.get(5));
 //        ;
-        user1.chooseElevator();
-        user1.callElevator();
-        //add thread for elevator
+//        add thread for elevator
 //        user2.callElevator();
 //        user3.callElevator();
 //        user4.callElevator();
@@ -42,15 +60,51 @@ public class Demo {
 //        user6.callElevator();
 //        user7.callElevator();
 //        user8.callElevator();
-
-
-
+//
+//
+//
 //        SwingUtilities.invokeLater(Demo::createAndShowGUI);
     }
-    private static User newUser (List<Floor> floorList) {
 
-        var user = new User(0, "Oleh", 60, floorList.get(2), floorList.get(3));
+    private static User newUser (List<Floor> floorList) throws InterruptedException {
+        int randomStartFloor=1+(int) (Math.random()*floorList.size()-1);
+        int randomName=1+(int) (Math.random()*10);
+        int randomWeight=40+(int) (Math.random()*100);
+        int randomDestinationFloor=1+(int) (Math.random()*floorList.size()-1);
+        List<String> names = List.of("Oleh", "Maksym", "Vladyslav", "Valeriia", "Liliia", "Viktoriia", "Anastasiia", "Nazar", "Yaryna", "Illia", "Tetiana");
+        String name = names.get(randomName);
+        var user = new User(name,  randomWeight, floorList.get(randomStartFloor), floorList.get(randomDestinationFloor));
+        floorList.get(randomStartFloor).add(user);
+        log.warn("Created new user "+name+" User ID: "+user.getId()+" User start floor is: "+user.getStartFloor().getNumber()+" User destination floor is: "+user.getDestinationFloor().getNumber());
+        user.callElevator();
         return user;
+    }
+
+    public static void threadCreator(User user)
+    {
+        userThread thread = new userThread();
+        log.warn("New thread created for user with ID "+user.getId()+". Thread ID :" + thread.getId());
+        thread.run();
+    }
+
+    public static void timerToCreateNewUser(List<Floor> floors) {
+        TimerTask task = new TimerTask() {
+            @SneakyThrows
+            public void run() {
+                new Thread(() -> {
+                    try {
+                        newUser(floors);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+        };
+        Timer timer = new Timer();
+
+        long delay = 2L;
+        long period = 100L;
+        timer.scheduleAtFixedRate(task, delay,period);
     }
     private static void createAndShowGUI() {
         //Create and set up the window.
@@ -66,3 +120,9 @@ public class Demo {
         frame.setVisible(true);
     }
 }
+class userThread extends Thread {
+    public void run(){
+        System.out.println("Thread is working...");
+    }
+}
+
