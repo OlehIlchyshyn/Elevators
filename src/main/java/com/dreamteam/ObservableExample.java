@@ -14,37 +14,22 @@ public class ObservableExample {
     public static int elevatorAmount = 3;
 
     public static void main(String[] args) {
-        Observer observer = new Observer();
-        Observable observable = new Observable();
+//        Observer observer = new Observer();
+//        Observer observer2 = new Observer();
+//        Observable observable = new Observable();
+//
+//        observable.addPropertyChangeListener(observer);
+//        observable.addPropertyChangeListener(observer2);
+//        observable.doThings();
 
-        observable.addPropertyChangeListener(observer);
-        observable.doThings();
 
-        JFrame frame = new JFrame();
-        var form  = new MainForm();
-        frame.setContentPane(form.getRootPanel());
-        frame.pack();
-        frame.setVisible(true);
-
-        DefaultTableModel model = (DefaultTableModel) form.getTable1().getModel();
-
-        model.addColumn("Floor");
-
-        for(int i = 0; i < elevatorAmount; i++) {
-            model.addColumn("Elevator #" + i);
-        }
-
-        for(int i = 0; i < floorAmount; i++) {
-            model.addRow(new Object[elevatorAmount]);
-            model.setValueAt(floorAmount - i, i, 0);
-        }
-
-        form.getTable1().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        form.getTable1().getColumnModel().getColumn(0).setMaxWidth(50);
-
-        ChangeCellColor(form.getTable1().getColumnModel(), 1, 2);
-        ChangeCellColor(form.getTable1().getColumnModel(), 2, 5);
-        ChangeCellColor(form.getTable1().getColumnModel(), 3, 8);
+//
+//        ChangeCellColor(form.getTable1().getColumnModel(), 1, 2);
+//        ChangeCellColor(form.getTable1().getColumnModel(), 2, 5);
+//        ChangeCellColor(form.getTable1().getColumnModel(), 3, 8);
+//
+//        form.getTable1().setValueAt("\uD83D\uDC68", 1, 1);
+//        form.getTable1().setValueAt("\uD83D\uDC7F", 2, 2);
     }
 
     public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex) {

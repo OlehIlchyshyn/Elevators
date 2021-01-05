@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,6 +32,7 @@ public abstract class Elevator {
     protected Floor currentFloor;
     protected Floor currentDestination;
 
+    private PropertyChangeSupport support;
 
     public Elevator(Floor floor) {
         currentFloor = floor;
@@ -38,6 +41,12 @@ public abstract class Elevator {
         waitingUsers = new LinkedList<>();
         destinations = new ArrayList<>();
         destinations.add(currentFloor);
+
+        support = new PropertyChangeSupport(this);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
     }
 
     protected int getCurrentUserCount() {
@@ -66,6 +75,7 @@ public abstract class Elevator {
 
     public void moveToTheNextFloor() throws InterruptedException {
       moveToFloor();
+        log.warn("blya");
       allActionsOnCurrentFloor();
     }
 
@@ -85,7 +95,11 @@ public abstract class Elevator {
             return;
         }
         destinations.remove(0);
+
         currentFloor = destinations.get(0);
+
+        support.firePropertyChange("currentFloor", null, currentFloor.getNumber());
+
         if (destinations.size() < 2) {
             currentDestination = null;
             this.status = ElevatorStatus.FREE;
