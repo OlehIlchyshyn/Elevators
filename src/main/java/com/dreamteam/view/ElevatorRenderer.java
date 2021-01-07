@@ -19,6 +19,7 @@ public class ElevatorRenderer extends DefaultTableCellRenderer {
         Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         c.setBackground(Color.WHITE);
+        c.setForeground(Color.BLACK);
 
         if (row == _floor ) {
             switch(_status) {

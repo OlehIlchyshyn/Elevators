@@ -1,7 +1,6 @@
 package com.dreamteam;
 
-import com.dreamteam.view.ElevatorRenderer;
-import com.dreamteam.view.ElevatorStatus;
+import com.dreamteam.view.*;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -17,17 +16,44 @@ public class Observer implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-//        System.out.println("Observer: " + evt.getPropertyName() + " " + evt.getNewValue());
+        if(evt.getPropertyName().equals(ObservableProperties.FLOOR_CHANGED.toString())) {
+            var elevator = (ElevatorViewModel)evt.getNewValue();
+            ElevatorStatus status = ElevatorStatus.WORK;
 
+            if(elevator.getCurrentActiveUserAmount() == 0) {
+                status = ElevatorStatus.FREE;
+            }
 
-        if(evt.getPropertyName().equals("currentFloor")) {
-            ChangeCellColor(table.getColumnModel(), 1, (int)evt.getNewValue());
+            if(elevator.getCurrentActiveUserAmount() == elevator.getMaxActiveUserAmount() ||
+               elevator.getMaxCapacity() - elevator.getCurrentCapacity() <= 40) {
+                status = ElevatorStatus.FULL;
+            }
+
+            ChangeCellColor(table.getColumnModel(), 1, elevator.getCurrentFloor(), status);
         }
+
+        if(evt.getPropertyName().equals(ObservableProperties.QUEUE_CHANGED.toString())) {
+            var userQueue = (UserQueueViewModel)evt.getNewValue();
+
+            String cellText = "";
+
+            for(int i = 0; i < userQueue.getUsersInQueue(); i++) {
+                cellText += "\uD83D\uDC36";
+            }
+
+            cellText += "\uD83D\uDC36";
+
+            table.setValueAt(cellText,
+                    Demo.floorAmount - userQueue.getCurrentFloor(),
+                    userQueue.getElevatorNumber());
+        }
+
+        table.repaint();
     }
 
-    public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex) {
+    public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex, ElevatorStatus status) {
         model.getColumn(elevatorIndex)
-                .setCellRenderer(new ElevatorRenderer(Demo.floorAmount - floorIndex, ElevatorStatus.FULL));
+                .setCellRenderer(new ElevatorRenderer(Demo.floorAmount - floorIndex, status));
     }
 //
 //    switch(Variables) {

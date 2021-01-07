@@ -1,8 +1,9 @@
 package com.dreamteam.model;
 
 import com.dreamteam.model.enums.ElevatorStatus;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.dreamteam.view.ElevatorViewModel;
+import com.dreamteam.view.ObservableProperties;
+import com.dreamteam.view.UserQueueViewModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -35,18 +36,14 @@ public abstract class Elevator {
     private PropertyChangeSupport support;
 
     public Elevator(Floor floor) {
+        support = new PropertyChangeSupport(this);
+
         currentFloor = floor;
         status = ElevatorStatus.FREE;
         activeUsers = new ArrayList<>();
         waitingUsers = new LinkedList<>();
         destinations = new ArrayList<>();
         destinations.add(currentFloor);
-
-        support = new PropertyChangeSupport(this);
-    }
-
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
     }
 
     protected int getCurrentUserCount() {
@@ -59,6 +56,7 @@ public abstract class Elevator {
     public void allActionsOnCurrentFloor() throws InterruptedException {
         deleteUserWhoExitOnCurrentFloor();
         pickupUsersOnCurrentFloor();
+
         if(destinations.size()==1) {
             status = ElevatorStatus.FREE;
             if(waitingUsers.size()!=0) {
@@ -69,13 +67,21 @@ public abstract class Elevator {
         moveToTheNextFloor();
     }
 
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        support.addPropertyChangeListener(listener);
+    }
+
     protected void takeWaitingUsers() throws InterruptedException {
         invoke(waitingUsers.poll());
+
+        var userQueueViewModel = new UserQueueViewModel(this.currentFloor.getNumber(),
+                this.id + 1,
+                this.waitingUsers.size());
+        support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
     }
 
     public void moveToTheNextFloor() throws InterruptedException {
       moveToFloor();
-        log.warn("blya");
       allActionsOnCurrentFloor();
     }
 
@@ -98,7 +104,13 @@ public abstract class Elevator {
 
         currentFloor = destinations.get(0);
 
-        support.firePropertyChange("currentFloor", null, currentFloor.getNumber());
+        var elevatorViewModel = new ElevatorViewModel(this.activeUsers.size(),
+                this.getCurrentCapacity(),
+                Elevator.maxUserCount,
+                Elevator.capacity,
+                this.currentFloor.getNumber());
+
+        support.firePropertyChange(ObservableProperties.FLOOR_CHANGED.toString(), null, elevatorViewModel);
 
         if (destinations.size() < 2) {
             currentDestination = null;

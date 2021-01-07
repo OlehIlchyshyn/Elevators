@@ -82,7 +82,10 @@ public class Demo {
         });
 
 //        elevatorList.add(elevator2);
-        floorList.forEach(f -> f.initQueues(elevatorList));
+        floorList.forEach(f -> {
+            f.initQueues(elevatorList);
+            f.addPropertyChangeListener(observer);
+        });
 
         timerToCreateNewUser(floorList);
 //        User user1 = newUser(floorList);
@@ -152,8 +155,8 @@ public class Demo {
         };
         Timer timer = new Timer();
 
-        long delay = 2L;
-        long period = 100L;
+        long delay = 50L;
+        long period = 1000L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
 
