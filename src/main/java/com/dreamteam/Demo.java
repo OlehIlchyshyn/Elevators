@@ -95,7 +95,7 @@ public class Demo {
         int startFLoorIndex = rand.nextInt(floorList.size());
         int destinationFloorIndex = rand.nextInt(floorList.size());
         if (destinationFloorIndex == startFLoorIndex) {
-            if (destinationFloorIndex + 1 > floorList.size()) {
+            if (destinationFloorIndex + 1 == floorList.size()) {
                 destinationFloorIndex--;
             } else {
                 destinationFloorIndex++;
@@ -106,10 +106,10 @@ public class Demo {
                 floorList.get(startFLoorIndex),
                 floorList.get(destinationFloorIndex));
         floorList.get(startFLoorIndex).add(user);
-        log.info("New user: " + user.getStartFloor() + ", ID: " + user.getId() +
+        log.info("New user: " + user.getName() + ", ID: " + user.getId() +
                 ", Start floor: " + user.getStartFloor().getNumber() +
                 ", Destination floor: " + user.getDestinationFloor().getNumber() +
-                " ,Elevator: " + user.getChosenElevator().getClass().getName() + " " +
+                " ,Elevator: " + user.getChosenElevator().getClass().getSimpleName() + " " +
                 user.getChosenElevator().getId());
         return user;
     }
