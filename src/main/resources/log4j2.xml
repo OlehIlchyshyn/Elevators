@@ -25,7 +25,7 @@
         <Logger name="file" level="info" additivity="false">
             <appender-ref ref="FILE" />
         </Logger>
-        <Root level="warn">
+        <Root level="info">
             <AppenderRef ref="FILE" />
             <AppenderRef ref="STDOUT" />
         </Root>

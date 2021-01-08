@@ -9,9 +9,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.TimerTask;
 import java.util.Timer;
 
 @Slf4j
@@ -88,56 +87,31 @@ public class Demo {
         });
 
         timerToCreateNewUser(floorList);
-//        User user1 = newUser(floorList);
-//        User user2 = newUser(floorList);
-//        User user3 = newUser(floorList);
-//        User user4 = newUser(floorList);
-//        User user5 = newUser(floorList);
-//        User user6 = newUser(floorList);
-//        User user7 = newUser(floorList);
-//        User user8 = newUser(floorList);
-//        User user9 = newUser(floorList);
-//        User user2 = new User(1, "Oleh", 60, floorList.get(4), floorList.get(6));
-//        User user3 = new User(2, "Oleh", 60, floorList.get(6), floorList.get(7));
-//        User user4 = new User(3, "Oleh", 60, floorList.get(6), floorList.get(8));
-//        User user5= new User(4, "Oleh", 60, floorList.get(6), floorList.get(2));
-//        User user6 = new User(5, "Oleh", 60, floorList.get(1), floorList.get(4));
-//        User user7 = new User(6, "Oleh", 60, floorList.get(0), floorList.get(3));
-//        User user8 = new User(7, "Oleh", 60, floorList.get(3), floorList.get(5));
-//        ;
-//        add thread for elevator
-//        user2.callElevator();
-//        user3.callElevator();
-//        user4.callElevator();
-//        user5.callElevator();
-//        user6.callElevator();
-//        user7.callElevator();
-//        user8.callElevator();
-//
-//
-//
-//        SwingUtilities.invokeLater(Demo::createAndShowGUI);
     }
 
-    private static User newUser (List<Floor> floorList) throws InterruptedException {
-        int randomStartFloor=1+(int) (Math.random()*floorList.size()-1);
-        int randomName=1+(int) (Math.random()*10);
-        int randomWeight=40+(int) (Math.random()*100);
-        int randomDestinationFloor=1+(int) (Math.random()*floorList.size()-1);
+    private static User createNewUser(List<Floor> floorList){
+        Random rand = new Random();
         List<String> names = List.of("Oleh", "Maksym", "Vladyslav", "Valeriia", "Liliia", "Viktoriia", "Anastasiia", "Nazar", "Yaryna", "Illia", "Tetiana");
-        String name = names.get(randomName);
-        var user = new User(name,  randomWeight, floorList.get(randomStartFloor), floorList.get(randomDestinationFloor));
-        floorList.get(randomStartFloor).add(user);
-        log.warn("Created new user "+name+" User ID: "+user.getId()+" User start floor is: "+user.getStartFloor().getNumber()+" User destination floor is: "+user.getDestinationFloor().getNumber());
-        user.callElevator();
+        int startFLoorIndex = rand.nextInt(floorList.size());
+        int destinationFloorIndex = rand.nextInt(floorList.size());
+        if (destinationFloorIndex == startFLoorIndex) {
+            if (destinationFloorIndex + 1 > floorList.size()) {
+                destinationFloorIndex--;
+            } else {
+                destinationFloorIndex++;
+            }
+        }
+        var user = new User(names.get(rand.nextInt(names.size())),
+                rand.nextInt(200),
+                floorList.get(startFLoorIndex),
+                floorList.get(destinationFloorIndex));
+        floorList.get(startFLoorIndex).add(user);
+        log.info("New user: " + user.getStartFloor() + ", ID: " + user.getId() +
+                ", Start floor: " + user.getStartFloor().getNumber() +
+                ", Destination floor: " + user.getDestinationFloor().getNumber() +
+                " ,Elevator: " + user.getChosenElevator().getClass().getName() + " " +
+                user.getChosenElevator().getId());
         return user;
-    }
-
-    public static void threadCreator(User user)
-    {
-        userThread thread = new userThread();
-        log.warn("New thread created for user with ID "+user.getId()+". Thread ID :" + thread.getId());
-        thread.run();
     }
 
     public static void timerToCreateNewUser(List<Floor> floors) {
@@ -146,7 +120,7 @@ public class Demo {
             public void run() {
                 new Thread(() -> {
                     try {
-                        newUser(floors);
+                        createNewUser(floors).callElevator();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -158,13 +132,6 @@ public class Demo {
         long delay = 50L;
         long period = 1000L;
         timer.scheduleAtFixedRate(task, delay,period);
-    }
-
-
-}
-class userThread extends Thread {
-    public void run(){
-        System.out.println("Thread is working...");
     }
 }
 
