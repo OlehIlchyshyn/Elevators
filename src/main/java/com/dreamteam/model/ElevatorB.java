@@ -91,8 +91,8 @@ public class ElevatorB extends Elevator {
     @Override
     protected  void  pickupUsersOnCurrentFloor() {
         super.pickupUsersOnCurrentFloor();
-        log.warn("Current floor of elevatorB " + currentFloor.getNumber());
-        log.warn("Current waiting users size elevatorB is:"+waitingUsers.size());
+        log.info("ElevatorB: ID " + this.id + ", Floor " + currentFloor.getNumber() +
+                ", Waiting users: " + waitingUsers.size());
 
 
         while (true)
@@ -101,7 +101,9 @@ public class ElevatorB extends Elevator {
             if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
                 currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
             } else break;
-            log.warn("Current user of elevatorB "+currentUser.getName()+" Current user id:" + currentUser.getId()+" Start floor:"+currentUser.getStartFloor().getNumber()+" Destination floor"+currentUser.getDestinationFloor().getNumber());
+            log.info("Current user of ElevatorB: ID " + this.id + ": "+ currentUser.getId() +
+                    ", Start floor:"+currentUser.getStartFloor().getNumber() +
+                    ", Destination floor: " + currentUser.getDestinationFloor().getNumber());
 
             if (currentUser.canUserEnter(this)) {
                 //hm

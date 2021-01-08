@@ -33,15 +33,15 @@ public class ElevatorA extends Elevator {
     protected void pickupUsersOnCurrentFloor() {
         while (true){
         super.pickupUsersOnCurrentFloor();
-        log.warn("Current floor of elevatorA " + currentFloor.getNumber());
-        log.warn("Current waiting users size elevatorA is:"+waitingUsers.size());
-//        System.out.println("\nElevatorr" + currentFloor.getNumber());
+        log.info("ElevatorA: ID " + this.id + ", Floor " + currentFloor.getNumber() +
+                ", Waiting users: " + waitingUsers.size());
         User currentUser;
         if (!currentFloor.getUsersQueueToElevator().get(this).isEmpty()) {
             currentUser = currentFloor.getUsersQueueToElevator().get(this).element();
         } else break;
-        log.warn("Current user of elevatorA " + currentUser.getId()+" Start floor:"+currentUser.getStartFloor().getNumber()+" Destination floor"+currentUser.getDestinationFloor().getNumber());
-//            System.out.println("\nuserr"+currentUser.getStartFloor().getNumber()+currentUser.getDestinationFloor().getNumber());
+        log.info("Current user of ElevatorA: ID " + this.id + ": "+ currentUser.getId() +
+                ", Start floor:"+currentUser.getStartFloor().getNumber() +
+                ", Destination floor: " + currentUser.getDestinationFloor().getNumber());
 
         if (currentUser.canUserEnter(this)) {
             //hm
