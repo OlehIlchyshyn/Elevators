@@ -14,7 +14,7 @@ public class ElevatorB extends Elevator {
     }
 
     @Override
-    protected void moveToTheNextFloor() {
+    protected synchronized void moveToTheNextFloor() {
         if (activeUsers.isEmpty()) {
             if (waitingUsers.isEmpty()) {
                 status = ElevatorStatus.FREE;

@@ -59,7 +59,7 @@ public class Main {
         };
         Timer timer = new Timer();
         long delay = 0L;
-        long period = 80L;
+        long period = 30L;
         timer.scheduleAtFixedRate(task, delay,period);
 
     }
