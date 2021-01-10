@@ -1,8 +1,12 @@
 package com.dreamteam.model2;
 
+import com.dreamteam.view.ObservableProperties;
+import com.dreamteam.view.UserQueueViewModel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.*;
 
 @Getter
@@ -13,8 +17,13 @@ public class Floor {
     private Floor previousFloor;
     private Floor nextFloor;
 
-    public Floor(int number) {
+    private PropertyChangeSupport support;
+
+    public Floor(int number, PropertyChangeListener listener) {
         this.number = number;
+
+        support = new PropertyChangeSupport(this);
+        support.addPropertyChangeListener(listener);
     }
 
     public void initQueues(List<Elevator> elevators) {
@@ -34,5 +43,10 @@ public class Floor {
                 .orElseThrow(NoSuchElementException::new);
         usersQueueToElevator.get(elevator).add(user);
         user.setChosenElevator(elevator);
+
+        var userQueueViewModel = new UserQueueViewModel(this.number,
+                elevator.id + 1,
+                elevator.waitingUsers.size());
+        support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
     }
 }

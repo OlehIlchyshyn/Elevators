@@ -75,7 +75,7 @@ public class Main {
         List<Elevator> elevatorList = new ArrayList<>();
 
         for (int i = 0; i < floorAmount; ++i) {
-            floorList.add(new Floor(i));
+            floorList.add(new Floor(i, observer));
         }
 
         floorList.get(0).setPreviousFloor(null);
@@ -114,7 +114,7 @@ public class Main {
         };
         Timer timer = new Timer();
         long delay = 0L;
-        long period = 80L;
+        long period = 50L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
 

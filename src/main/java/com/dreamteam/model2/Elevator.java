@@ -41,7 +41,8 @@ public abstract class Elevator {
         activeUsers = new ArrayList<>();
         waitingUsers = new LinkedList<>();
 
-        support = new PropertyChangeSupport(listener);
+        support = new PropertyChangeSupport(this);
+        support.addPropertyChangeListener(listener);
     }
 
     public synchronized void invoke(User user) {
@@ -86,6 +87,11 @@ public abstract class Elevator {
                     activeUsers.add(user);
                     log.info(ConsoleColors.BLUE+"User " + user.getName() + "" + user.getId() +
                             " entered Elevator" + this.getId() +  ", active users: " + activeUsers.size()+ConsoleColors.RESET);
+
+                    var userQueueViewModel = new UserQueueViewModel(currentFloor.getNumber(),
+                            id + 1,
+                            waitingUsers.size());
+                    support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
                 } else {
                     break;
                 }
