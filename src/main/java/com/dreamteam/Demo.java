@@ -24,7 +24,7 @@ import java.util.Timer;
 
 
 public class Demo {
-    public static int floorAmount = 10;
+//    public static int floorAmount = 10;
     public static int elevatorAmount = 1;
     private static Observer observer;
 
@@ -54,10 +54,10 @@ public class Demo {
             model.addColumn("Elevator #" + i);
         }
 
-        for(int i = 0; i < floorAmount; i++) {
-            model.addRow(new Object[elevatorAmount]);
-            model.setValueAt(floorAmount - i, i, 0);
-        }
+//        for(int i = 0; i < floorAmount; i++) {
+//            model.addRow(new Object[elevatorAmount]);
+//            model.setValueAt(floorAmount - i, i, 0);
+//        }
 
         form.getTable1().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         form.getTable1().getColumnModel().getColumn(0).setMaxWidth(50);
@@ -67,9 +67,9 @@ public class Demo {
 
     private static void ExecuteAlgorithm() {
         List<Floor> floorList = new ArrayList<>();
-        for (int i = 0; i <= floorAmount; ++i) {
-            floorList.add(new Floor(i));
-        }
+//        for (int i = 0; i <= floorAmount; ++i) {
+//            floorList.add(new Floor(i));
+//        }
 
         Elevator elevator = new ElevatorA(floorList.get(0));
 //        Elevator elevator2 = new ElevatorB(floorList.get(0));

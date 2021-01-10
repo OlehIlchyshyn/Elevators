@@ -33,8 +33,8 @@ public class Main {
             }
         });
 
-        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(1, 1, 30, 1));
-        form.getSpinnerElevatorAmount().setModel(new SpinnerNumberModel(1, 1, 10, 1));
+        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(30, 3, 30, 1));
+        form.getSpinnerElevatorAmount().setModel(new SpinnerNumberModel(5, 1, 10, 1));
 
         frame.setContentPane(form.getRootPanel());
         frame.pack();
@@ -114,7 +114,7 @@ public class Main {
         };
         Timer timer = new Timer();
         long delay = 0L;
-        long period = 50L;
+        long period = 60L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
 

@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class ElevatorB extends Elevator {
-    public ElevatorB(Floor currentFloor, ElevatorDirection elevatorDirection, PropertyChangeListener listener) {
+    public ElevatorB(Floor currentFloor, PropertyChangeListener listener, ElevatorDirection elevatorDirection) {
         super(currentFloor, elevatorDirection, listener);
     }
 

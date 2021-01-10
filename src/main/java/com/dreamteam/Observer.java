@@ -1,5 +1,7 @@
 package com.dreamteam;
 
+import com.dreamteam.model2.Floor;
+import com.dreamteam.model2.Main;
 import com.dreamteam.view.*;
 
 import javax.swing.*;
@@ -35,17 +37,19 @@ public class Observer implements PropertyChangeListener {
         if(evt.getPropertyName().equals(ObservableProperties.QUEUE_CHANGED.toString())) {
             var userQueue = (UserQueueViewModel)evt.getNewValue();
 
-            String cellText = "";
+            StringBuilder cellText = new StringBuilder();
 
             for(int i = 0; i < userQueue.getUsersInQueue(); i++) {
-                cellText += "\uD83D\uDC36";
+                cellText.append("♀");
             }
 
-            cellText += "\uD83D\uDC36";
-
-            table.setValueAt(cellText,
-                    Demo.floorAmount - userQueue.getCurrentFloor(),
-                    userQueue.getElevatorNumber());
+//            try {
+//                table.setValueAt(cellText.toString(),
+//                        Main.floorAmount - userQueue.getCurrentFloor() - 1,
+//                        userQueue.getElevatorNumber());
+//            } catch(Exception ex) {
+////                JOptionPane.showMessageDialog(null, userQueue.getCurrentFloor());
+//            }
         }
 
         table.repaint();
@@ -53,7 +57,7 @@ public class Observer implements PropertyChangeListener {
 
     public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex, ElevatorStatus status) {
         model.getColumn(elevatorIndex)
-                .setCellRenderer(new ElevatorRenderer(Demo.floorAmount - floorIndex, status));
+                .setCellRenderer(new ElevatorRenderer(Main.floorAmount - floorIndex, status));
     }
 //
 //    switch(Variables) {

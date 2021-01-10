@@ -12,6 +12,8 @@ import java.util.*;
 @Getter
 @Setter
 public class Floor {
+    public static int MAX_FLOOR_AMOUNT = 30;
+
     private int number;
     private Map<Elevator, Queue<User>> usersQueueToElevator;
     private Floor previousFloor;

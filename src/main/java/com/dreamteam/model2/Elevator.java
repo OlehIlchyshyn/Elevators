@@ -22,7 +22,7 @@ import static java.lang.Thread.sleep;
 @Slf4j
 public abstract class Elevator {
     public static int MAX_USER_COUNT = 30;
-    public static int CAPACITY = 1000;
+    public static int CAPACITY = 200;
     private static int counter = 0;
     protected int id;
     protected ElevatorStatus status;
@@ -88,10 +88,10 @@ public abstract class Elevator {
                     log.info(ConsoleColors.BLUE+"User " + user.getName() + "" + user.getId() +
                             " entered Elevator" + this.getId() +  ", active users: " + activeUsers.size()+ConsoleColors.RESET);
 
-                    var userQueueViewModel = new UserQueueViewModel(currentFloor.getNumber(),
-                            id + 1,
-                            waitingUsers.size());
-                    support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
+//                    var userQueueViewModel = new UserQueueViewModel(currentFloor.getNumber(),
+//                            id + 1,
+//                            waitingUsers.size());
+//                    support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
                 } else {
                     break;
                 }
