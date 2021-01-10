@@ -1,5 +1,6 @@
 package com.dreamteam.model2;
 
+import com.dreamteam.console_colors.ConsoleColors;
 import com.dreamteam.view.ElevatorViewModel;
 import com.dreamteam.view.ObservableProperties;
 import com.dreamteam.view.UserQueueViewModel;
@@ -42,12 +43,12 @@ public abstract class Elevator {
     public synchronized void invoke(User user) {
         if (status == ElevatorStatus.BUSY) {
             waitingUsers.add(user);
-            log.info("User " + user.getName() + user.getId() + " added to " + "Elevator" + this.getId() + " waiting list, size: " + waitingUsers.size());
+            log.info(ConsoleColors.BLUE+"User " + user.getName() + user.getId() + " added to " + "Elevator" + this.getId() + " waiting list, size: " + waitingUsers.size()+ConsoleColors.RESET);
         } else if (status == ElevatorStatus.FREE){
             status = ElevatorStatus.BUSY;
             if (user.getStartFloor() != currentFloor) {
                 waitingUsers.add(user);
-                log.info("Elevator" + this.getId() + " goes to " + "user " + user.getName() + user.getId());
+                log.info(ConsoleColors.YELLOW+"Elevator" + this.getId() + " goes to " + "user " + user.getName() + user.getId()+ConsoleColors.RESET);
             }
         }
     }
@@ -63,9 +64,9 @@ public abstract class Elevator {
 
     protected synchronized void deleteUsersWhoExitOnCurrentFloor() {
         if (activeUsers.removeIf(x -> x.getDestinationFloor() == currentFloor)) {
-            log.info("User(s) left Elevator" + this.getId());
+            log.info(ConsoleColors.BLUE+"User(s) left Elevator" + this.getId()+ConsoleColors.RESET);
         } else {
-            log.info("No users left Elevator" + this.getId());
+            log.info(ConsoleColors.BLUE+"No users left Elevator" + this.getId()+ConsoleColors.RESET);
         }
     }
 
@@ -79,8 +80,8 @@ public abstract class Elevator {
                         waitingUsers.remove(user);
                     currentFloor.getUsersQueueToElevator().get(this).poll();
                     activeUsers.add(user);
-                    log.info("User " + user.getName() + "" + user.getId() +
-                            " entered Elevator" + this.getId() +  ", active users: " + activeUsers.size());
+                    log.info(ConsoleColors.BLUE+"User " + user.getName() + "" + user.getId() +
+                            " entered Elevator" + this.getId() +  ", active users: " + activeUsers.size()+ConsoleColors.RESET);
                 } else {
                     break;
                 }
@@ -102,8 +103,8 @@ public abstract class Elevator {
 
     public synchronized void moveToFloor(Floor floor) {
         this.currentFloor = floor;
-        log.info("Elevator" + this.getId() + ", current floor: " +
-                (this.currentFloor == null ? "NULL" : this.currentFloor.getNumber()));
+        log.info(ConsoleColors.YELLOW+"Elevator" + this.getId() + ", current floor: " +
+                (this.currentFloor == null ? "NULL" : this.currentFloor.getNumber())+ConsoleColors.RESET);
     }
 }
 

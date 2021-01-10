@@ -1,5 +1,6 @@
 package com.dreamteam.model2;
 
+import com.dreamteam.console_colors.ConsoleColors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
@@ -15,7 +16,7 @@ public class ElevatorA extends Elevator {
         if (activeUsers.isEmpty()) {
             if (waitingUsers.isEmpty()) {
                 status = ElevatorStatus.FREE;
-                log.info("No active and waiting users, elevator is free now");
+                log.info(ConsoleColors.YELLOW+"No active and waiting users, elevator is free now"+ConsoleColors.RESET);
                 return;
             } else {
                 // Elevator goes to start floor of the first user in waiting users list
@@ -25,7 +26,7 @@ public class ElevatorA extends Elevator {
                 } else {
                     direction = ElevatorDirection.DOWN;
                 }
-                log.info("ElevatorA" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction);
+                log.info(ConsoleColors.YELLOW+"ElevatorA" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction+ConsoleColors.RESET);
             }
         } else {
             // Elevator goes to desired destination of the first user in active users list
@@ -66,7 +67,7 @@ public class ElevatorA extends Elevator {
                     .filter(x -> x.getDestinationFloor().getNumber() == finalDestFloor)
                     .findFirst().get();
             this.currentDestination = currentUser.getDestinationFloor();
-            log.info("ElevatorA" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction);
+            log.info(ConsoleColors.YELLOW+"ElevatorA" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction+ConsoleColors.RESET);
 //            log.info("Current user of ElevatorA" + this.id + ": " + currentUser.getId() +
 //                    ", Start floor:" + currentUser.getStartFloor().getNumber() +
 //                    ", *Destination floor: " + currentUser.getDestinationFloor().getNumber());

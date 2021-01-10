@@ -1,5 +1,6 @@
 package com.dreamteam.utils;
 
+import com.dreamteam.console_colors.ConsoleColors;
 import com.dreamteam.model2.Floor;
 import com.dreamteam.model2.User;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +31,11 @@ public class UserFactory {
                 floorList.get(startFLoorIndex),
                 floorList.get(destinationFloorIndex));
         floorList.get(startFLoorIndex).addUserToQueue(user);
-        log.info("New user: " + user.getName() + ", ID: " + user.getId() +
+        log.info(ConsoleColors.CYAN+"New user: " + user.getName() + ", ID: " + user.getId() +
                 ", Start floor: " + user.getStartFloor().getNumber() +
                 ", Destination floor: " + user.getDestinationFloor().getNumber() +
                 ", " + user.getChosenElevator().getClass().getSimpleName() + "" +
-                user.getChosenElevator().getId());
+                user.getChosenElevator().getId()+ConsoleColors.RESET);
         return user;
     }
 }
