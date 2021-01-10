@@ -27,32 +27,63 @@ public class ElevatorB extends Elevator {
                 this.currentDestination = waitingUsers.poll().getStartFloor();
                 log.info("ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber());
             }
-        } else {
+        }
+        else {
+            int destFloor;
+            int tempFloor;
+            if (direction == ElevatorDirection.UP) {
+                destFloor = activeUsers.stream()
+                        .map(User::getDestinationFloor)
+                        .map(Floor::getNumber)
+                        .filter(x -> x >= this.currentFloor.getNumber())
+                        .min(Integer::compareTo)
+                        .orElse(-1);
 
-            // Now destination is set as fairest floor to current
-            int destFloor = activeUsers.stream()
-                    .map(User::getDestinationFloor)
-                    .map(Floor::getNumber)
-                    .max(Comparator.comparingInt(x -> Math.abs(x - this.currentFloor.getNumber())))
-                    .get();
+                tempFloor = waitingUsers.stream()
+                        .map(User::getStartFloor)
+                        .map(Floor::getNumber)
+                        .filter(x -> x >= this.currentFloor.getNumber())
+                        .min(Integer::compareTo)
+                        .orElse(-1);
+                destFloor=Math.min(destFloor, tempFloor);
+            } else {
+                destFloor = activeUsers.stream()
+                        .map(User::getDestinationFloor)
+                        .map(Floor::getNumber)
+                        .filter(x -> x < this.currentFloor.getNumber())
+                        .max(Integer::compareTo)
+                        .orElse(-1);
+
+                tempFloor = waitingUsers.stream()
+                        .map(User::getStartFloor)
+                        .map(Floor::getNumber)
+                        .filter(x -> x <= this.currentFloor.getNumber())
+                        .max(Integer::compareTo)
+                        .orElse(-1);
+
+                destFloor=Math.max(destFloor,tempFloor);
+            }
+            if (destFloor == -1) {
+                destFloor = activeUsers.stream()
+                        .map(User::getDestinationFloor)
+                        .map(Floor::getNumber)
+                        .min(Comparator.comparingInt(x -> Math.abs(x - this.currentFloor.getNumber())))
+                        .get();
+                if (destFloor >= this.currentFloor.getNumber()) {
+                    direction = ElevatorDirection.UP;
+                } else {
+                    direction = ElevatorDirection.DOWN;
+                }
+            }
+            int finalDestFloor = destFloor;
             User currentUser = activeUsers.stream()
-                    .filter(x -> x.getDestinationFloor().getNumber() == destFloor)
+                    .filter(x -> x.getDestinationFloor().getNumber() == finalDestFloor)
                     .findFirst().get();
             this.currentDestination = currentUser.getDestinationFloor();
+            log.info("ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction);
         }
-        if (currentFloor.getNumber() > currentDestination.getNumber()) {
-            if (currentFloor.getPreviousFloor() == null) {
-                moveToFloor(currentFloor.getNextFloor());
-            } else {
-                moveToFloor(currentFloor.getPreviousFloor());
-            }
-        } else {
-            if (currentFloor.getNextFloor() == null) {
-                moveToFloor(currentFloor.getPreviousFloor());
-            } else {
-                moveToFloor(currentFloor.getNextFloor());
-            }
-        }
+        moveToFloor(this.currentDestination);
     }
+
 }
 
