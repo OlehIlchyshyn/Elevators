@@ -1,9 +1,9 @@
 package com.dreamteam.model2;
 
 import com.dreamteam.console_colors.ConsoleColors;
-import com.dreamteam.view.ElevatorViewModel;
+import com.dreamteam.view.viewModels.ElevatorViewModel;
 import com.dreamteam.view.ObservableProperties;
-import com.dreamteam.view.UserQueueViewModel;
+import com.dreamteam.view.viewModels.UserQueueViewModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -88,10 +88,10 @@ public abstract class Elevator {
                     log.info(ConsoleColors.BLUE+"User " + user.getName() + "" + user.getId() +
                             " entered Elevator" + this.getId() +  ", active users: " + activeUsers.size()+ConsoleColors.RESET);
 
-//                    var userQueueViewModel = new UserQueueViewModel(currentFloor.getNumber(),
-//                            id + 1,
-//                            waitingUsers.size());
-//                    support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
+                    var userQueueViewModel = new UserQueueViewModel(currentFloor.getNumber(),
+                            id + 1,
+                            currentFloor.getUsersQueueToElevator().get(this).size());
+                    support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
                 } else {
                     break;
                 }

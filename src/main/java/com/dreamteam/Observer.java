@@ -1,8 +1,9 @@
 package com.dreamteam;
 
-import com.dreamteam.model2.Floor;
 import com.dreamteam.model2.Main;
 import com.dreamteam.view.*;
+import com.dreamteam.view.viewModels.ElevatorViewModel;
+import com.dreamteam.view.viewModels.UserQueueViewModel;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -32,6 +33,14 @@ public class Observer implements PropertyChangeListener {
             }
 
             ChangeCellColor(table.getColumnModel(), elevator.getNumber(), elevator.getCurrentFloor(), status);
+
+            for(int i = 0; i < Main.floorAmount; i++) {
+                table.setValueAt("", i,elevator.getNumber() * 2);
+
+                if(i == Main.floorAmount - elevator.getCurrentFloor()) {
+                    table.setValueAt(elevator.getCurrentActiveUserAmount(), i - 1, elevator.getNumber() * 2);
+                }
+            }
         }
 
         if(evt.getPropertyName().equals(ObservableProperties.QUEUE_CHANGED.toString())) {
@@ -39,19 +48,13 @@ public class Observer implements PropertyChangeListener {
 
             StringBuilder cellText = new StringBuilder();
 
-//            for(int i = 0; i < userQueue.getUsersInQueue(); i++) {
-//                cellText.append("♀");
-//            }
+            for(int i = 0; i < userQueue.getUsersInQueue(); i++) {
+                cellText.append("♀");
+            }
 
-            cellText.append(userQueue.getUsersInQueue());
-
-//            try {
-                table.setValueAt(cellText.toString(),
-                        Main.floorAmount - userQueue.getCurrentFloor() - 1,
-                        userQueue.getElevatorNumber() * 2 - 1);
-//            } catch(Exception ex) {
-////                JOptionPane.showMessageDialog(null, userQueue.getCurrentFloor());
-//            }
+            table.setValueAt(cellText.toString(),
+                    Main.floorAmount - userQueue.getCurrentFloor() - 1,
+                    userQueue.getElevatorNumber() * 2 - 1);
         }
 
         table.repaint();
@@ -59,11 +62,6 @@ public class Observer implements PropertyChangeListener {
 
     public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex, ElevatorStatus status) {
         model.getColumn(elevatorIndex * 2)
-                .setCellRenderer(new ElevatorRenderer(Main.floorAmount - floorIndex, status));
+                .setCellRenderer(new ElevatorRenderer(Main.floorAmount - floorIndex - 1, status));
     }
-//
-//    switch(Variables) {
-//        case :
-//
-//    }
 }

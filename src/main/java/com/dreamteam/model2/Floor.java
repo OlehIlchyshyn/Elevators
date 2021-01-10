@@ -2,7 +2,7 @@ package com.dreamteam.model2;
 
 import com.dreamteam.console_colors.ConsoleColors;
 import com.dreamteam.view.ObservableProperties;
-import com.dreamteam.view.UserQueueViewModel;
+import com.dreamteam.view.viewModels.UserQueueViewModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,7 @@ public class Floor {
 
         var userQueueViewModel = new UserQueueViewModel(this.number,
                 elevator.id + 1,
-                elevator.waitingUsers.size());
+                usersQueueToElevator.get(elevator).size());
         support.firePropertyChange(ObservableProperties.QUEUE_CHANGED.toString(), null, userQueueViewModel);
     }
 }

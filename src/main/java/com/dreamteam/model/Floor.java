@@ -1,7 +1,7 @@
 package com.dreamteam.model;
 
 import com.dreamteam.view.ObservableProperties;
-import com.dreamteam.view.UserQueueViewModel;
+import com.dreamteam.view.viewModels.UserQueueViewModel;
 import lombok.*;
 
 import java.beans.PropertyChangeListener;

@@ -40,13 +40,13 @@ public class ElevatorB extends Elevator {
                 destFloor = activeUsers.stream()
                         .map(User::getDestinationFloor)
                         .map(Floor::getNumber)
-                        .filter(x -> x >= this.currentFloor.getNumber())
+                        .filter(x -> x > this.currentFloor.getNumber())
                         .min(Integer::compareTo)
                         .orElse(-1);
                 tempFloor = waitingUsers.stream()
                         .map(User::getStartFloor)
                         .map(Floor::getNumber)
-                        .filter(x -> x >= this.currentFloor.getNumber())
+                        .filter(x -> x > this.currentFloor.getNumber())
                         .min(Integer::compareTo)
                         .orElse(-1);
                 if (destFloor != -1 && tempFloor != -1) {

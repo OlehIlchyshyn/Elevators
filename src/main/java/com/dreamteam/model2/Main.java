@@ -33,7 +33,7 @@ public class Main {
             }
         });
 
-        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(30, 3, 30, 1));
+        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(100, 3, 100, 1));
         form.getSpinnerElevatorAmount().setModel(new SpinnerNumberModel(5, 1, 10, 1));
 
         frame.setContentPane(form.getRootPanel());
@@ -87,7 +87,7 @@ public class Main {
         floorList.get(floorAmount - 1).setNextFloor(null);
 
         for (int i = 0; i < elevatorAmount; ++i) {
-            elevatorList.add(new ElevatorA(floorList.get(0), observer, ElevatorDirection.UP));
+            elevatorList.add(new ElevatorB(floorList.get(0), observer, ElevatorDirection.UP));
         }
 
         floorList.forEach(f -> {
@@ -115,7 +115,7 @@ public class Main {
         };
         Timer timer = new Timer();
         long delay = 0L;
-        long period = 500L;
+        long period = 60L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
 

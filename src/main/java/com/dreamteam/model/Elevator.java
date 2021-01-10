@@ -1,9 +1,8 @@
 package com.dreamteam.model;
 
 import com.dreamteam.model.enums.ElevatorStatus;
-import com.dreamteam.view.ElevatorViewModel;
 import com.dreamteam.view.ObservableProperties;
-import com.dreamteam.view.UserQueueViewModel;
+import com.dreamteam.view.viewModels.UserQueueViewModel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
