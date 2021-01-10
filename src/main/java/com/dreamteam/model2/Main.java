@@ -86,12 +86,9 @@ public class Main {
         floorList.get(floorAmount - 1).setNextFloor(null);
 
         for (int i = 0; i < elevatorAmount; ++i) {
-            elevatorList.add(new ElevatorA(floorList.get(0), observer));
+            elevatorList.add(new ElevatorA(floorList.get(0), observer, ElevatorDirection.UP));
         }
 
-//        Elevator elevator2 = new ElevatorA(floorList.get(9));
-
-//        elevatorList.add(elevator2);
         floorList.forEach(f -> {
             f.initQueues(elevatorList);
         });
@@ -106,15 +103,6 @@ public class Main {
             }).start();
         });
 
-
-//        new Thread(() -> {
-//            try {
-//                elevator2.process();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
-
         TimerTask task = new TimerTask() {
             @SneakyThrows
             public void run() {
@@ -126,7 +114,7 @@ public class Main {
         };
         Timer timer = new Timer();
         long delay = 0L;
-        long period = 300L;
+        long period = 80L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
 
