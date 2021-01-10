@@ -20,7 +20,7 @@ import static java.lang.Thread.sleep;
 @Setter
 @Slf4j
 public abstract class Elevator {
-    public static int MAX_USER_COUNT = 10;
+    public static int MAX_USER_COUNT = 30;
     public static int CAPACITY = 1000;
     private static int counter = 0;
     protected int id;
@@ -30,12 +30,16 @@ public abstract class Elevator {
     protected Floor currentFloor;
     protected Floor currentDestination;
 
-    public Elevator(Floor currentFloor) {
+    private PropertyChangeSupport support;
+
+    public Elevator(Floor currentFloor, PropertyChangeListener listener) {
         this.currentFloor = currentFloor;
         id = counter++;
         status = ElevatorStatus.FREE;
         activeUsers = new ArrayList<>();
         waitingUsers = new LinkedList<>();
+
+        support = new PropertyChangeSupport(listener);
     }
 
     public synchronized void invoke(User user) {
@@ -103,6 +107,15 @@ public abstract class Elevator {
         this.currentFloor = floor;
         log.info("Elevator" + this.getId() + ", current floor: " +
                 (this.currentFloor == null ? "NULL" : this.currentFloor.getNumber()));
+
+        var elevatorViewModel = new ElevatorViewModel(id + 1,
+                activeUsers.size(),
+                getCurrentCapacity(),
+                Elevator.MAX_USER_COUNT,
+                Elevator.CAPACITY,
+                currentFloor.getNumber());
+
+        support.firePropertyChange(ObservableProperties.FLOOR_CHANGED.toString(), null, elevatorViewModel);
     }
 }
 

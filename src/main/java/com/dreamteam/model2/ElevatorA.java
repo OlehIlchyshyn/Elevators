@@ -2,12 +2,13 @@ package com.dreamteam.model2;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.beans.PropertyChangeListener;
 import java.util.Comparator;
 
 @Slf4j
 public class ElevatorA extends Elevator {
-    public ElevatorA(Floor currentFloor) {
-        super(currentFloor);
+    public ElevatorA(Floor currentFloor, PropertyChangeListener listener) {
+        super(currentFloor, listener);
     }
 
     @Override

@@ -104,13 +104,13 @@ public abstract class Elevator {
 
         currentFloor = destinations.get(0);
 
-        var elevatorViewModel = new ElevatorViewModel(this.activeUsers.size(),
-                this.getCurrentCapacity(),
-                Elevator.maxUserCount,
-                Elevator.capacity,
-                this.currentFloor.getNumber());
-
-        support.firePropertyChange(ObservableProperties.FLOOR_CHANGED.toString(), null, elevatorViewModel);
+//        var elevatorViewModel = new ElevatorViewModel(this.activeUsers.size(),
+//                this.getCurrentCapacity(),
+//                Elevator.maxUserCount,
+//                Elevator.capacity,
+//                this.currentFloor.getNumber());
+//
+//        support.firePropertyChange(ObservableProperties.FLOOR_CHANGED.toString(), null, elevatorViewModel);
 
         if (destinations.size() < 2) {
             currentDestination = null;

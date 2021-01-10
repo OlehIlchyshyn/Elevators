@@ -29,7 +29,7 @@ public class Observer implements PropertyChangeListener {
                 status = ElevatorStatus.FULL;
             }
 
-            ChangeCellColor(table.getColumnModel(), 1, elevator.getCurrentFloor(), status);
+            ChangeCellColor(table.getColumnModel(), elevator.getNumber(), elevator.getCurrentFloor(), status);
         }
 
         if(evt.getPropertyName().equals(ObservableProperties.QUEUE_CHANGED.toString())) {

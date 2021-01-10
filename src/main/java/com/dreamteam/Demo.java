@@ -129,8 +129,8 @@ public class Demo {
         };
         Timer timer = new Timer();
 
-        long delay = 50L;
-        long period = 1000L;
+        long delay = 100L;
+        long period = 50L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
 }
