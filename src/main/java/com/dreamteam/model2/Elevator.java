@@ -25,12 +25,13 @@ public abstract class Elevator {
     private static int counter = 0;
     protected int id;
     protected ElevatorStatus status;
+    protected ElevatorDirection direction;
     protected List<User> activeUsers;
     protected Queue<User> waitingUsers;
     protected Floor currentFloor;
     protected Floor currentDestination;
 
-    public Elevator(Floor currentFloor) {
+    public Elevator(Floor currentFloor, ElevatorDirection direction) {
         this.currentFloor = currentFloor;
         id = counter++;
         status = ElevatorStatus.FREE;

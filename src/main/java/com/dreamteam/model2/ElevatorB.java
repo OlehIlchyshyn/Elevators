@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class ElevatorB extends Elevator {
-    public ElevatorB(Floor currentFloor) {
-        super(currentFloor);
+    public ElevatorB(Floor currentFloor, ElevatorDirection elevatorDirection) {
+        super(currentFloor, elevatorDirection);
     }
 
     @Override
