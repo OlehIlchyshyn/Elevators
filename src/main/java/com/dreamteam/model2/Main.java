@@ -55,7 +55,7 @@ public class Main {
 
         model.addColumn("Floor");
 
-        for(int i = 0; i < elevatorAmount; i++) {
+        for(int i = 0; i < elevatorAmount * 2; i++) {
             model.addColumn("Elevator #" + i);
         }
 
@@ -115,7 +115,7 @@ public class Main {
         };
         Timer timer = new Timer();
         long delay = 0L;
-        long period = 60L;
+        long period = 500L;
         timer.scheduleAtFixedRate(task, delay,period);
     }
 

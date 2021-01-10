@@ -26,11 +26,11 @@ public class User {
         this.destinationFloor = destinationFloor;
     }
 
-    public void callElevator() {
+    public synchronized void callElevator() {
        chosenElevator.invoke(this);
     }
 
-    public boolean canUserEnter(Elevator elevator) {
+    public synchronized boolean canUserEnter(Elevator elevator) {
         return elevator.getActiveUsersCount() + 1 <= Elevator.MAX_USER_COUNT
                 && elevator.getCurrentCapacity() + getWeight() <= Elevator.CAPACITY;
     }

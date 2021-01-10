@@ -13,7 +13,7 @@ public class ElevatorA extends Elevator {
     }
 
     @Override
-    protected synchronized void moveToTheNextFloor() {
+    protected synchronized void moveToTheNextFloor() throws InterruptedException {
         if (activeUsers.isEmpty()) {
             if (waitingUsers.isEmpty()) {
                 status = ElevatorStatus.FREE;

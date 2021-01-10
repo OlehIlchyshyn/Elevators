@@ -22,7 +22,7 @@ import static java.lang.Thread.sleep;
 @Slf4j
 public abstract class Elevator {
     public static int MAX_USER_COUNT = 30;
-    public static int CAPACITY = 200;
+    public static int CAPACITY = 1000;
     private static int counter = 0;
     protected int id;
     protected ElevatorStatus status;
@@ -101,7 +101,7 @@ public abstract class Elevator {
         }
     }
 
-    abstract protected void moveToTheNextFloor();
+    abstract protected void moveToTheNextFloor() throws InterruptedException;
 
     public synchronized int getActiveUsersCount() {
         return activeUsers.size();
@@ -111,20 +111,36 @@ public abstract class Elevator {
         return activeUsers.stream().map(User::getWeight).reduce(0, Integer::sum);
     }
 
-    public synchronized void moveToFloor(Floor floor) {
+    public synchronized void moveToFloor(Floor floor) throws InterruptedException {
+
+        var tempFloorNumber = currentFloor.getNumber();
+
+        while(tempFloorNumber != currentDestination.getNumber()) {
+            var elevatorViewModel = new ElevatorViewModel(id + 1,
+                    activeUsers.size(),
+                    getCurrentCapacity(),
+                    Elevator.MAX_USER_COUNT,
+                    Elevator.CAPACITY,
+                    tempFloorNumber);
+
+            support.firePropertyChange(ObservableProperties.FLOOR_CHANGED.toString(), null, elevatorViewModel);
+
+            switch (direction) {
+                case UP:
+                    tempFloorNumber++;
+                    break;
+                case DOWN:
+                    tempFloorNumber--;
+                    break;
+            }
+
+            sleep(50);
+        }
+
         this.currentFloor = floor;
 
         log.info(ConsoleColors.YELLOW+"Elevator" + this.getId() + ", current floor: " +
                 (this.currentFloor == null ? "NULL" : this.currentFloor.getNumber())+ConsoleColors.RESET);
-
-        var elevatorViewModel = new ElevatorViewModel(id + 1,
-                activeUsers.size(),
-                getCurrentCapacity(),
-                Elevator.MAX_USER_COUNT,
-                Elevator.CAPACITY,
-                currentFloor.getNumber());
-
-        support.firePropertyChange(ObservableProperties.FLOOR_CHANGED.toString(), null, elevatorViewModel);
     }
 }
 

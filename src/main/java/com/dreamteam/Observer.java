@@ -20,10 +20,10 @@ public class Observer implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equals(ObservableProperties.FLOOR_CHANGED.toString())) {
             var elevator = (ElevatorViewModel)evt.getNewValue();
-            ElevatorStatus status = ElevatorStatus.WORK;
+            ElevatorStatus status = ElevatorStatus.FREE;
 
-            if(elevator.getCurrentActiveUserAmount() == 0) {
-                status = ElevatorStatus.FREE;
+            if(elevator.getCurrentActiveUserAmount() > 0) {
+                status = ElevatorStatus.WORK;
             }
 
             if(elevator.getCurrentActiveUserAmount() == elevator.getMaxActiveUserAmount() ||
@@ -39,14 +39,16 @@ public class Observer implements PropertyChangeListener {
 
             StringBuilder cellText = new StringBuilder();
 
-            for(int i = 0; i < userQueue.getUsersInQueue(); i++) {
-                cellText.append("♀");
-            }
+//            for(int i = 0; i < userQueue.getUsersInQueue(); i++) {
+//                cellText.append("♀");
+//            }
+
+            cellText.append(userQueue.getUsersInQueue());
 
 //            try {
-//                table.setValueAt(cellText.toString(),
-//                        Main.floorAmount - userQueue.getCurrentFloor() - 1,
-//                        userQueue.getElevatorNumber());
+                table.setValueAt(cellText.toString(),
+                        Main.floorAmount - userQueue.getCurrentFloor() - 1,
+                        userQueue.getElevatorNumber() * 2 - 1);
 //            } catch(Exception ex) {
 ////                JOptionPane.showMessageDialog(null, userQueue.getCurrentFloor());
 //            }
@@ -56,7 +58,7 @@ public class Observer implements PropertyChangeListener {
     }
 
     public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex, ElevatorStatus status) {
-        model.getColumn(elevatorIndex)
+        model.getColumn(elevatorIndex * 2)
                 .setCellRenderer(new ElevatorRenderer(Main.floorAmount - floorIndex, status));
     }
 //
