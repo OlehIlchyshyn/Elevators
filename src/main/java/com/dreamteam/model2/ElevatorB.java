@@ -18,7 +18,7 @@ public class ElevatorB extends Elevator {
         if (activeUsers.isEmpty()) {
             if (waitingUsers.isEmpty()) {
                 status = ElevatorStatus.FREE;
-                log.info(ConsoleColors.CYAN+"No active and waiting users, ElevatorB" + this.id + " is free now"+ConsoleColors.RESET);
+                log.info(ConsoleColors.YELLOW+"No active and waiting users, ElevatorB" + this.id + " is free now"+ConsoleColors.RESET);
                 return;
             } else {
                 // Elevator goes to start floor of the first user in waiting users list
@@ -28,7 +28,7 @@ public class ElevatorB extends Elevator {
                 } else {
                     direction = ElevatorDirection.DOWN;
                 }
-                log.info(ConsoleColors.CYAN+"ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber()
+                log.info(ConsoleColors.YELLOW+"ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber()
                         + ", direction: " + direction+ConsoleColors.RESET);
             }
         }
@@ -92,7 +92,7 @@ public class ElevatorB extends Elevator {
             } else {
                 this.currentDestination = currentUser.getDestinationFloor();
             }
-            log.info(ConsoleColors.CYAN+"ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber()
+            log.info(ConsoleColors.YELLOW+"ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber()
                     + ", direction: " + direction + ConsoleColors.RESET);
         }
         moveToFloor(this.currentDestination);
