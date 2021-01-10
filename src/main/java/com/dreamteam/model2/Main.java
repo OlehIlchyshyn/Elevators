@@ -66,6 +66,7 @@ public class Main {
 
         form.getTable1().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         form.getTable1().getColumnModel().getColumn(0).setMaxWidth(50);
+        form.getTable1().setRowHeight(form.getTable1().getHeight() / floorAmount);
     }
 
     private static void ExecuteAlgorithm(MainForm form) {
