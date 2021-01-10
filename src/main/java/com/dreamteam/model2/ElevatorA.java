@@ -16,6 +16,7 @@ public class ElevatorA extends Elevator {
             if (waitingUsers.isEmpty()) {
                 status = ElevatorStatus.FREE;
                 log.info("No active and waiting users, elevator is free now");
+                return;
             } else {
                 // Elevator goes to start floor of the first user in waiting users list
                 this.currentDestination = waitingUsers.poll().getStartFloor();
