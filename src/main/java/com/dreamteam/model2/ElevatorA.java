@@ -29,11 +29,6 @@ public class ElevatorA extends Elevator {
                 log.info(ConsoleColors.YELLOW+"ElevatorA" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction+ConsoleColors.RESET);
             }
         } else {
-            // Elevator goes to desired destination of the first user in active users list
-            // TODO should be changed to real best destination logic
-//            User currentUser = activeUsers.stream().findFirst().get();
-
-            // Now destination is set as closest floor to current in direction of elevator
             int destFloor;
             if (direction == ElevatorDirection.UP) {
                 destFloor = activeUsers.stream()
@@ -68,9 +63,6 @@ public class ElevatorA extends Elevator {
                     .findFirst().get();
             this.currentDestination = currentUser.getDestinationFloor();
             log.info(ConsoleColors.YELLOW+"ElevatorA" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction+ConsoleColors.RESET);
-//            log.info("Current user of ElevatorA" + this.id + ": " + currentUser.getId() +
-//                    ", Start floor:" + currentUser.getStartFloor().getNumber() +
-//                    ", *Destination floor: " + currentUser.getDestinationFloor().getNumber());
         }
         moveToFloor(this.currentDestination);
     }

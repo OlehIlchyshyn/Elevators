@@ -1,5 +1,6 @@
 package com.dreamteam.model2;
 
+import com.dreamteam.console_colors.ConsoleColors;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
@@ -17,7 +18,7 @@ public class ElevatorB extends Elevator {
         if (activeUsers.isEmpty()) {
             if (waitingUsers.isEmpty()) {
                 status = ElevatorStatus.FREE;
-                log.info("No active and waiting users, ElevatorB" + this.id + " is free now");
+                log.info(ConsoleColors.CYAN+"No active and waiting users, ElevatorB" + this.id + " is free now"+ConsoleColors.RESET);
                 return;
             } else {
                 // Elevator goes to start floor of the first user in waiting users list
@@ -27,7 +28,8 @@ public class ElevatorB extends Elevator {
                 } else {
                     direction = ElevatorDirection.DOWN;
                 }
-                log.info("ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction);
+                log.info(ConsoleColors.CYAN+"ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber()
+                        + ", direction: " + direction+ConsoleColors.RESET);
             }
         }
         else {
@@ -90,20 +92,8 @@ public class ElevatorB extends Elevator {
             } else {
                 this.currentDestination = currentUser.getDestinationFloor();
             }
-            log.info("ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber() + ", direction: " + direction);
-//            if (currentFloor.getNumber() > currentDestination.getNumber()) {
-//                if (currentFloor.getPreviousFloor() == null) {
-//                    moveToFloor(currentFloor.getNextFloor());
-//                } else {
-//                    moveToFloor(currentFloor.getPreviousFloor());
-//                }
-//            } else {
-//                if (currentFloor.getNextFloor() == null) {
-//                    moveToFloor(currentFloor.getPreviousFloor());
-//                } else {
-//                    moveToFloor(currentFloor.getNextFloor());
-//                }
-//            }
+            log.info(ConsoleColors.CYAN+"ElevatorB" + this.id + " goes to floor " + currentDestination.getNumber()
+                    + ", direction: " + direction + ConsoleColors.RESET);
         }
         moveToFloor(this.currentDestination);
     }

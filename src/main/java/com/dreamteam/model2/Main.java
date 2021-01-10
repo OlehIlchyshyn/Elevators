@@ -23,11 +23,11 @@ public class Main {
         }
         floorList.get(FLOOR_COUNT - 1).setNextFloor(null);
 
-        Elevator elevator = new ElevatorA(floorList.get(0), ElevatorDirection.UP);
-//        Elevator elevator2 = new ElevatorA(floorList.get(9));
+        Elevator elevator = new ElevatorB(floorList.get(0), ElevatorDirection.UP);
+        Elevator elevator2 = new ElevatorB(floorList.get(9), ElevatorDirection.DOWN);
         List<Elevator> elevatorList = new ArrayList<>();
         elevatorList.add(elevator);
-//        elevatorList.add(elevator2);
+        elevatorList.add(elevator2);
         floorList.forEach(f -> {
             f.initQueues(elevatorList);
         });
@@ -40,13 +40,13 @@ public class Main {
             }
         }).start();
 
-//        new Thread(() -> {
-//            try {
-//                elevator2.process();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }).start();
+        new Thread(() -> {
+            try {
+                elevator2.process();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
         TimerTask task = new TimerTask() {
             @SneakyThrows
