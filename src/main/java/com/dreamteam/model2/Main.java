@@ -23,7 +23,7 @@ public class Main {
         }
         floorList.get(FLOOR_COUNT - 1).setNextFloor(null);
 
-        Elevator elevator = new ElevatorB(floorList.get(0), ElevatorDirection.UP);
+        Elevator elevator = new ElevatorA(floorList.get(0), ElevatorDirection.UP);
 //        Elevator elevator2 = new ElevatorA(floorList.get(9));
         List<Elevator> elevatorList = new ArrayList<>();
         elevatorList.add(elevator);
