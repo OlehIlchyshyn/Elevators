@@ -2,6 +2,7 @@ package com.dreamteam.model2;
 
 import com.dreamteam.Observer;
 import com.dreamteam.utils.UserFactory;
+import com.dreamteam.view.FloorRenderer;
 import com.dreamteam.view.MainForm;
 import lombok.SneakyThrows;
 
@@ -12,6 +13,8 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.*;
 import java.util.List;
 import java.util.Timer;
@@ -22,6 +25,7 @@ public class Main {
     private static Observer observer;
     private static Timer timer;
     private static boolean working;
+
 
     public static void main(String[] args) {
         createAndShowGUI();
@@ -44,6 +48,13 @@ public class Main {
                 StopAlgorithm(form);
             }
         });
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent we) {
+                StopAlgorithm(form);
+                System.exit(0);
+            }
+        });
 
         //ImageIcon imgThisImg = new ImageIcon("C:\\Users\\Viktoriia\\IdeaProjects\\Elevators\\images.png");
 
@@ -62,22 +73,20 @@ public class Main {
         floorAmount = (int)form.getSpinnerFloorAmount().getValue();
     }
 
-//    private static void clearTable(MainForm form){
-//        DefaultTableModel model = (DefaultTableModel)form.getTable1().getModel();
-//
-//        for(int i =0;i<model.getRowCount();++i)
-//        {
-//            model.removeRow(i);
-//        }
-//    }
+    private static void clearTable(MainForm form){
+        DefaultTableModel model = (DefaultTableModel)form.getTable1().getModel();
+        model.setRowCount(0);
+        model.setColumnCount(1);
+    }
 
     private static void createTable(MainForm form) {
         DefaultTableModel model = (DefaultTableModel)form.getTable1().getModel();
-        getNumbers(form);
 
+        getNumbers(form);
+        var table = form.getTable1();
         model.addColumn("Floor");
 
-        for(int i = 0; i < elevatorAmount * 2; i++) {
+        for(int i = 0; i < elevatorAmount * 2-1; i++) {
             model.addColumn("Elevator #" + i);
         }
 
@@ -86,11 +95,14 @@ public class Main {
             model.setValueAt(floorAmount - i, i, 0);
         }
 
-        form.getTable1().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        form.getTable1().getColumnModel().getColumn(0).setMaxWidth(50);
-        form.getTable1().setRowHeight(form.getTable1().getHeight() / floorAmount);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.getColumnModel().getColumn(0).setMaxWidth(50);
+        table.setRowHeight(form.getTable1().getHeight() / floorAmount);
 
-//        form.getTable1().getColumn(0).setCellRenderer(new Renderer());
+        FloorRenderer FR = new FloorRenderer();
+        FR.setHorizontalAlignment( JLabel.CENTER );
+        table.getColumnModel().getColumn(0).setCellRenderer(FR);
+
 
 //        ImageIcon imgThisImg = new ImageIcon("C:\\Users\\Viktoriia\\IdeaProjects\\Elevators\\images.png");
 //        Label l = new Label();
@@ -119,7 +131,7 @@ public class Main {
 //        {
 //            model.removeRow(i);
 //        }
-
+        clearTable(form);
         createTable(form);
 
         List<Floor> floorList = new ArrayList<>();
@@ -138,10 +150,12 @@ public class Main {
 
         String strategy = Objects.requireNonNull(form.getComboBoxStrategy().getSelectedItem()).toString();
 
+        Elevator.setCounter(0);
         if(strategy.equals("Strategy A")){
             for (int i = 0; i < elevatorAmount; ++i) {
                 elevatorList.add(new ElevatorA(floorList.get(0), observer, ElevatorDirection.UP));
             }
+
         }
 
         if(strategy.equals("Strategy B")){
@@ -149,6 +163,7 @@ public class Main {
                 elevatorList.add(new ElevatorB(floorList.get(0), observer, ElevatorDirection.UP));
             }
         }
+
 
         floorList.forEach(f -> {
             f.initQueues(elevatorList);

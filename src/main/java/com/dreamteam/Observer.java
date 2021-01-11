@@ -6,7 +6,12 @@ import com.dreamteam.view.viewModels.ElevatorViewModel;
 import com.dreamteam.view.viewModels.UserQueueViewModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -52,6 +57,10 @@ public class Observer implements PropertyChangeListener {
                 cellText.append("♀");
             }
 
+            var QueueRenderer = new QueueCellRenderer();
+            QueueRenderer.setHorizontalAlignment(JLabel.RIGHT);
+            table.getColumnModel().getColumn(userQueue.getElevatorNumber() * 2 - 1).setCellRenderer(QueueRenderer);
+
             table.setValueAt(cellText.toString(),
                     Main.floorAmount - userQueue.getCurrentFloor() - 1,
                     userQueue.getElevatorNumber() * 2 - 1);
@@ -60,8 +69,10 @@ public class Observer implements PropertyChangeListener {
         table.repaint();
     }
 
-    public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex, ElevatorStatus status) {
-        model.getColumn(elevatorIndex * 2)
-                .setCellRenderer(new ElevatorRenderer(Main.floorAmount - floorIndex - 1, status));
+    public static void ChangeCellColor(TableColumnModel model, int elevatorIndex, int floorIndex, ElevatorStatus status)
+    {
+        var ElevatorRenderer = new ElevatorRenderer(Main.floorAmount - floorIndex - 1, status);
+        ElevatorRenderer.setHorizontalAlignment(JLabel.CENTER);
+        model.getColumn(elevatorIndex * 2).setCellRenderer(ElevatorRenderer);
     }
 }

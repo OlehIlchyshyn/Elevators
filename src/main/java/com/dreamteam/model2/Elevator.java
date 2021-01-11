@@ -23,6 +23,7 @@ import static java.lang.Thread.sleep;
 public abstract class Elevator {
     public static int MAX_USER_COUNT = 30;
     public static int CAPACITY = 1000;
+    @Setter
     private static int counter = 0;
     protected int id;
     protected ElevatorStatus status;
@@ -134,7 +135,8 @@ public abstract class Elevator {
                     break;
             }
 
-            sleep(50);
+             sleep(50);
+
         }
 
         this.currentFloor = floor;
