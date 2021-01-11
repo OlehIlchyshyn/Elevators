@@ -6,18 +6,22 @@ import com.dreamteam.view.MainForm;
 import lombok.SneakyThrows;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class Main {
     public static int floorAmount;
     public static int elevatorAmount;
     private static Observer observer;
+    private static Timer timer;
+    private static boolean working;
 
     public static void main(String[] args) {
         createAndShowGUI();
@@ -26,6 +30,7 @@ public class Main {
     private static void createAndShowGUI() {
         JFrame frame = new JFrame();
         var form  = new MainForm();
+
         form.getStartButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -33,7 +38,16 @@ public class Main {
             }
         });
 
-        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(100, 3, 100, 1));
+        form.getStopButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StopAlgorithm(form);
+            }
+        });
+
+        //ImageIcon imgThisImg = new ImageIcon("C:\\Users\\Viktoriia\\IdeaProjects\\Elevators\\images.png");
+
+        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(20, 3, 100, 1));
         form.getSpinnerElevatorAmount().setModel(new SpinnerNumberModel(5, 1, 10, 1));
 
         frame.setContentPane(form.getRootPanel());
@@ -48,9 +62,17 @@ public class Main {
         floorAmount = (int)form.getSpinnerFloorAmount().getValue();
     }
 
-    private static void createTable(MainForm form) {
-        DefaultTableModel model = (DefaultTableModel) form.getTable1().getModel();
+//    private static void clearTable(MainForm form){
+//        DefaultTableModel model = (DefaultTableModel)form.getTable1().getModel();
+//
+//        for(int i =0;i<model.getRowCount();++i)
+//        {
+//            model.removeRow(i);
+//        }
+//    }
 
+    private static void createTable(MainForm form) {
+        DefaultTableModel model = (DefaultTableModel)form.getTable1().getModel();
         getNumbers(form);
 
         model.addColumn("Floor");
@@ -67,9 +89,37 @@ public class Main {
         form.getTable1().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         form.getTable1().getColumnModel().getColumn(0).setMaxWidth(50);
         form.getTable1().setRowHeight(form.getTable1().getHeight() / floorAmount);
+
+//        form.getTable1().getColumn(0).setCellRenderer(new Renderer());
+
+//        ImageIcon imgThisImg = new ImageIcon("C:\\Users\\Viktoriia\\IdeaProjects\\Elevators\\images.png");
+//        Label l = new Label();
+//        form.getTable1().setValueAt(imgThisImg.getImage(),0,1);
+
+//        created = true;
+
+    }
+
+    private static void StopAlgorithm(MainForm form){
+        timer.cancel();
+        Set<Thread> threads = Thread.getAllStackTraces().keySet();
+        threads.forEach(Thread::interrupt);
+        working = false;
     }
 
     private static void ExecuteAlgorithm(MainForm form) {
+        if(working)
+        {
+            JOptionPane.showMessageDialog(null, "Elevators are already working ;)");
+            return;
+        }
+
+//        DefaultTableModel model = (DefaultTableModel)form.getTable1().getModel();
+//        for(int i =0;i<form.getTable1().getRowCount();++i)
+//        {
+//            model.removeRow(i);
+//        }
+
         createTable(form);
 
         List<Floor> floorList = new ArrayList<>();
@@ -86,8 +136,18 @@ public class Main {
         }
         floorList.get(floorAmount - 1).setNextFloor(null);
 
-        for (int i = 0; i < elevatorAmount; ++i) {
-            elevatorList.add(new ElevatorB(floorList.get(0), observer, ElevatorDirection.UP));
+        String strategy = Objects.requireNonNull(form.getComboBoxStrategy().getSelectedItem()).toString();
+
+        if(strategy.equals("Strategy A")){
+            for (int i = 0; i < elevatorAmount; ++i) {
+                elevatorList.add(new ElevatorA(floorList.get(0), observer, ElevatorDirection.UP));
+            }
+        }
+
+        if(strategy.equals("Strategy B")){
+            for (int i = 0; i < elevatorAmount; ++i) {
+                elevatorList.add(new ElevatorB(floorList.get(0), observer, ElevatorDirection.UP));
+            }
         }
 
         floorList.forEach(f -> {
@@ -104,20 +164,21 @@ public class Main {
             }).start();
         });
 
+        working = true;
+
         TimerTask task = new TimerTask() {
-            @SneakyThrows
-            public void run() {
-                new Thread(() -> {
-                    User user = UserFactory.createNewUser(floorList);
-                    user.callElevator();
-                }).start();
-            }
-        };
-        Timer timer = new Timer();
-        long delay = 0L;
-        long period = 60L;
-        timer.scheduleAtFixedRate(task, delay,period);
-    }
-
-
+                    @SneakyThrows
+                    public void run() {
+                        new Thread(() -> {
+                            User user = UserFactory.createNewUser(floorList);
+                            user.callElevator();
+                        }).start();
+                        }
+            };
+            timer = new Timer();
+            long delay = 0L;
+            long period = 60L;
+            timer.scheduleAtFixedRate(task, delay,period);
+        }
 }
+
