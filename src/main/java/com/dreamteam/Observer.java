@@ -14,9 +14,11 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Random;
 
 public class Observer implements PropertyChangeListener {
     public JTable table;
+    private static Random random = new Random();
 
     public Observer(JTable table) {
         this.table = table;
@@ -50,11 +52,18 @@ public class Observer implements PropertyChangeListener {
 
         if(evt.getPropertyName().equals(ObservableProperties.QUEUE_CHANGED.toString())) {
             var userQueue = (UserQueueViewModel)evt.getNewValue();
+            var unicodeEmojis = new String[] {
+                    "\uD83D\uDC69", // man
+                    "\uD83D\uDC68", // woman
+                    "\uD83D\uDC66", // boy
+                    "\uD83D\uDC67", // girl
+            };
 
             StringBuilder cellText = new StringBuilder();
 
             for(int i = 0; i < userQueue.getUsersInQueue(); i++) {
-                cellText.append("♀");
+                var emoji = unicodeEmojis[random.nextInt(unicodeEmojis.length)];
+                cellText.append(emoji);
             }
 
             var QueueRenderer = new QueueCellRenderer();

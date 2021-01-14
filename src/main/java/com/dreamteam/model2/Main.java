@@ -58,7 +58,7 @@ public class Main {
 
         //ImageIcon imgThisImg = new ImageIcon("C:\\Users\\Viktoriia\\IdeaProjects\\Elevators\\images.png");
 
-        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(20, 3, 100, 1));
+        form.getSpinnerFloorAmount().setModel(new SpinnerNumberModel(30, 3, 50, 1));
         form.getSpinnerElevatorAmount().setModel(new SpinnerNumberModel(5, 1, 10, 1));
 
         frame.setContentPane(form.getRootPanel());
